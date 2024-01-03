@@ -1,0 +1,210 @@
+<template>
+  <k-field v-bind="$props" class="k-table-field">
+    <div class="k-table">
+      <table>
+        <!-- Headers -->
+        <thead>
+          <k-draggable
+            :list="dragData"
+            :options="dragOptions"
+            :handle="true"
+            element="tr"
+            @end="onColumnDrag"
+          >
+            <th class="k-table-index-column">#</th>
+            <th
+              v-for="(column, columnIndex) in columns"
+              :key="columnIndex + '-header'"
+              :data-sortable="true"
+              class="k-table-column"
+            >
+              <k-bar>
+                <k-sort-handle class="k-table-sort-handle" />
+                <k-text-input
+                  v-model="columns[columnIndex]"
+                  @input="updateTable()"
+                  :placeholder="`Column ${columnIndex + 1}`"
+                  type="text"
+                />
+                <k-button
+                  title="Delete column"
+                  icon="remove"
+                  v-show="columns.length > minColumns"
+                  @click="deleteColumn(columnIndex)"
+                />
+              </k-bar>
+            </th>
+            <th class="k-table-options-column">
+              <k-button
+                :disabled="columns.length >= maxColumns"
+                title="Add column"
+                icon="add"
+                @click="addColumn()"
+              />
+            </th>
+          </k-draggable>
+        </thead>
+        <!-- Rows -->
+        <k-draggable
+          :list="dragData"
+          :options="dragOptions"
+          :handle="true"
+          element="tbody"
+          @end="onRowDrag"
+        >
+          <tr v-for="(row, rowIndex) in rows" :key="rowIndex">
+            <!-- Index & drag handle -->
+            <td :data-sortable="rows.length > 1" class="k-table-index-column">
+              <slot name="index">
+								<div class="k-table-index" v-text="rowIndex + 1" />
+							</slot>
+              <k-sort-handle class="k-table-sort-handle" />
+            </td>
+            <!-- Cell -->
+            <td v-for="(column, columnIndex) in row" :key="columnIndex" class="k-table-column">
+              <k-text-input
+                v-model="row[columnIndex]"
+                @input="updateTable()"
+                type="text"
+              />
+            </td>
+            <!-- Options -->
+            <td class="k-table-options-column">
+              <k-button
+                :disabled="rows.length === 1"
+                title="Delete row"
+                icon="remove"
+                @click="deleteRow(rowIndex)"
+              />
+            </td>
+          </tr>
+        </k-draggable>
+      </table>
+    </div>
+    <!-- Footer -->
+    <footer data-align="center" class="k-bar">
+      <k-button
+        title="Add row"
+        icon="add"
+        size="xs"
+        variant="filled"
+        @click="addRow()"
+      />
+    </footer>
+  </k-field>
+</template>
+
+<script>
+  export default {
+    props: {
+      label: String,
+      type: String,
+      help: String,
+      disabled: Boolean,
+      required: Boolean,
+      value: [String, Array],
+
+      minColumns: Number,
+      maxColumns: Number
+    },
+    computed: {
+      columns() {
+        return this.tableData[0];
+      },
+      rows() {
+        return this.tableData.slice(1);
+      },
+      dragData() {
+        return [...this.tableData];
+      },
+      dragOptions() {
+			  return {
+				  fallbackClass: "k-table-row-fallback",
+				  ghostClass: "k-table-row-ghost"
+			  };
+		  },
+      tableData() {
+        const clearValue = (input) => input.trim().replace(/^- /, "").replace(/^[\"\'](.*)[\"\']$/g, "$1");
+        const isRowBreak = (input) => input === '- ';
+
+        let array = typeof this.value === 'string'
+          ? this.value.split('\n')
+            .reduce((row, input) => (
+              isRowBreak(input)
+                ? row.push([])
+                : row[row.length - 1].push(clearValue(input)),
+              row
+            ), [])
+            .filter(row => row.length > 0)
+            .map(row => [...row])
+          : this.value;
+
+        array ||= Array.from({ length: 4 }, () => Array(this.minColumns).fill(''));
+
+        return array;
+      },
+    },
+    methods: {
+      moveArray(array, oldIndex, newIndex) {
+        const [movedIndex] = array.splice(oldIndex, 1);
+        array.splice(newIndex, 0, movedIndex);
+      },
+      moveColumn(oldIndex, newIndex) {
+        this.moveArray(this.columns, oldIndex, newIndex);
+        this.rows.forEach((column) => this.moveArray(column, oldIndex, newIndex));
+        this.updateTable();
+      },
+      moveRow(oldIndex, newIndex) {
+        this.moveArray(this.tableData, oldIndex, newIndex);
+        this.updateTable();
+      },
+      onColumnDrag(event) {
+        this.moveColumn(event.oldIndex - 1, event.newIndex - 1);
+      },
+      onRowDrag(event) {
+        this.moveRow(event.oldIndex + 1, event.newIndex + 1);
+      },
+      addRow() {
+        this.tableData.push(Array(this.columns.length).fill(''));
+        this.updateTable();
+      },
+      addColumn() {
+        this.tableData.forEach((column) => column.push(""));
+        this.updateTable();
+      },
+      deleteColumn(columnIndex) {
+        this.tableData.forEach((column) => column.splice(columnIndex, 1));
+        this.updateTable();
+      },
+      deleteRow(rowIndex) {
+        this.tableData.splice(rowIndex + 1, 1);
+        this.updateTable();
+      },
+      updateTable() {
+        this.$emit('input', this.tableData);
+      }
+    }
+  };
+</script>
+
+<style lang="scss">
+.k-table-field {
+  .k-table {
+    thead th {
+      .k-bar {
+        gap: 0;
+      }
+      button {
+        color: initial;
+        height: var(--button-height);
+        width: var(--button-width);
+        aspect-ratio: auto !important;
+        padding: 0;
+      }
+    }
+    +footer {
+      margin-top: var(--spacing-3);
+    }
+  }
+}
+</style>
