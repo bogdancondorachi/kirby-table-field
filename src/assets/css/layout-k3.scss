@@ -16,12 +16,6 @@
       }
     }
 
-    tbody tr:only-child {
-      .k-sort-handle {
-        display: none !important;
-      }
-    }
-
     .k-table-column .k-text-input {
       padding: $input-padding;
     }

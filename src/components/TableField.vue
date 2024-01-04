@@ -15,11 +15,11 @@
             <th
               v-for="(column, columnIndex) in columns"
               :key="columnIndex + '-header'"
-              :data-sortable="true"
+              :data-sortable="sortable && columns.length > 1"
               class="k-table-column"
             >
               <div class="k-bar">
-                <k-sort-handle class="k-table-sort-handle" />
+                <k-sort-handle v-if="sortable && columns.length > 1" class="k-table-sort-handle" />
                 <k-text-input
                   v-model="columns[columnIndex]"
                   @input="updateTable()"
@@ -54,11 +54,11 @@
         >
           <tr v-for="(row, rowIndex) in rows" :key="rowIndex">
             <!-- Index & drag handle -->
-            <td :data-sortable="rows.length > 1" class="k-table-index-column">
+            <td :data-sortable="sortable && rows.length > 1" class="k-table-index-column">
               <slot name="index">
 								<div class="k-table-index" v-text="rowIndex + 1" />
 							</slot>
-              <k-sort-handle class="k-table-sort-handle" />
+              <k-sort-handle v-if="sortable && rows.length > 1" class="k-table-sort-handle" />
             </td>
             <!-- Cell -->
             <td v-for="(column, columnIndex) in row" :key="columnIndex" class="k-table-column">
@@ -103,6 +103,10 @@ export default {
     disabled: Boolean,
     required: Boolean,
     value: [String, Array],
+    sortable: {
+      type: Boolean,
+      default: true
+    },
 
     minColumns: Number,
     maxColumns: Number
