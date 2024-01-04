@@ -11,7 +11,7 @@
             element="tr"
             @end="onColumnDrag"
           >
-            <th class="k-table-index-column">#</th>
+            <th v-if="hasIndexColumn" class="k-table-index-column">#</th>
             <th
               v-for="(column, columnIndex) in columns"
               :key="columnIndex + '-header'"
@@ -54,9 +54,9 @@
         >
           <tr v-for="(row, rowIndex) in rows" :key="rowIndex">
             <!-- Index & drag handle -->
-            <td :data-sortable="sortable && rows.length > 1" class="k-table-index-column">
+            <td v-if="hasIndexColumn" :data-sortable="sortable && rows.length > 1" class="k-table-index-column">
               <slot name="index">
-								<div class="k-table-index" v-text="rowIndex + 1" />
+								<div class="k-table-index" v-text="index + rowIndex" />
 							</slot>
               <k-sort-handle v-if="sortable && rows.length > 1" class="k-table-sort-handle" />
             </td>
@@ -103,6 +103,10 @@ export default {
     disabled: Boolean,
     required: Boolean,
     value: [String, Array],
+    index: {
+			type: [Number, Boolean],
+			default: 1
+		},
     sortable: {
       type: Boolean,
       default: true
@@ -126,6 +130,9 @@ export default {
 				fallbackClass: "k-table-row-fallback",
 				ghostClass: "k-table-row-ghost"
 			};
+		},
+    hasIndexColumn() {
+			return this.sortable || this.index !== false;
 		},
     tableData() {
       const clearValue = (input) => input.trim().replace(/^- /, "").replace(/^[\"\'](.*)[\"\']$/g, "$1");
