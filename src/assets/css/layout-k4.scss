@@ -1,0 +1,21 @@
+.k-table-field {
+  .k-table {
+    thead th.k-table-column {
+      .k-bar {
+        gap: 0;
+      }
+      .k-button {
+        color: initial;
+        height: var(--button-height);
+        width: var(--button-width);
+        aspect-ratio: auto !important;
+        padding: 0;
+      }
+    }
+
+    + footer.k-bar {
+      margin-top: var(--spacing-3);
+    }
+  }
+}
+

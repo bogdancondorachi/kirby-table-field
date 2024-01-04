@@ -1,0 +1,33 @@
+.k-table-field {  
+  $input-padding: .5rem;
+
+  .k-table {
+    thead {
+      tr, tr:hover {
+        .k-sort-handle {
+          display: contents !important;
+        }
+      }
+
+      th.k-table-options-column {
+        .k-button {
+          padding: 0;
+        }
+      }
+    }
+
+    tbody tr:only-child {
+      .k-sort-handle {
+        display: none !important;
+      }
+    }
+
+    .k-table-column .k-text-input {
+      padding: $input-padding;
+    }
+    
+    + footer.k-bar:where([data-align=center]) {
+      justify-content: center;
+    }
+  }
+}
