@@ -1,25 +1,20 @@
 .k-table-field {  
-  $input-padding: .5rem;
-
   .k-table {
+    .k-bar {
+      gap: var(--spacing-2);
+    }
     thead {
       tr, tr:hover {
         .k-sort-handle {
           display: contents !important;
         }
       }
-
       th.k-table-options-column {
         .k-button {
           padding: 0;
         }
       }
     }
-
-    .k-table-column .k-text-input {
-      padding: $input-padding;
-    }
-    
     + footer.k-bar:where([data-align=center]) {
       justify-content: center;
     }
