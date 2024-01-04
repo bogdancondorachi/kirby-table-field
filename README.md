@@ -22,18 +22,24 @@ git submodule add https://github.com/bogdancondorachi/kirby-table-field.git site
 
 ## Usage
 
-#### Add the field to your blueprint:
+### Add the field to your blueprint:
 ```yaml
 fields:
   table:
     label: table
     type: table
-    # optional, default values
-    minColumns: 2
-    maxColumns: 5
+    #optional (see props below)
 ```
 
-#### Use the field in your template:
+### Field Properties:
+| Name       | Type                | Default | Description                                        |
+|:---------- |:--------------------|:------- |:---------------------------------------------------|
+| index      | `Number`, `Boolean` | `1`     | Specifies the starting index. If set to `false`, it removes the index column; in this case, `sortable` also needs to be set to `false`                |
+| sortable   | `Boolean`           | `true`  | Toggles drag & drop sorting                        |
+| minColumns | `Number`            | `2`     | Sets the minimum required columns in the table     |
+| minColumns | `Number`            | `5`     | Sets the maximum allowed columns in the table      |
+
+### Use the field in your template:
 ```php
 <?php $table = $page->table()->toTable(); ?>
 <?php if($table != null): ?>
