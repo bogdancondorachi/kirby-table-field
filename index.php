@@ -2,16 +2,7 @@
 
 Kirby::plugin('bogdancondorachi/table-field', [
   'fields' => [
-    'table' => [
-      'props' => [
-        'minColumns' => function ($minColumns = 2) {
-          return $minColumns;
-        },
-        'maxColumns' => function ($maxColumns = 5) {
-          return $maxColumns;
-        }
-      ]
-    ]
+    'table' => []
   ],
   
   'fieldMethods' => [

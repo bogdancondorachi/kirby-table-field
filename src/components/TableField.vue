@@ -103,6 +103,7 @@ export default {
     disabled: Boolean,
     required: Boolean,
     value: [String, Array],
+    
     index: {
 			type: [Number, Boolean],
 			default: 1
@@ -111,9 +112,14 @@ export default {
       type: Boolean,
       default: true
     },
-
-    minColumns: Number,
-    maxColumns: Number
+    minColumns: {
+      type: Number,
+      default: 2
+    },
+    maxColumns: {
+      type: Number,
+      default: 5
+    }
   },
   computed: {
     columns() {
