@@ -3,9 +3,6 @@
 # Kirby Table Field
 The table field streamlines the management of structured data in tables, offering a user-friendly interface that simplifies data entry and enhances content creation by making tabular information effortlessly manageable.
 
-> [!NOTE]
-> This plugin only supports Kirby 4. If you are still using Kirby 3, we recommend the previous [table-field](https://github.com/ragi96/table-field) plugin.
-
 ## Installation
 
 ### Composer
@@ -14,9 +11,14 @@ The table field streamlines the management of structured data in tables, offerin
 composer require bogdancondorachi/kirby-table-field
 ```
 
-### Download
+### Git Submodule
+```bash
+git submodule add https://github.com/bogdancondorachi/kirby-table-field.git site/plugins/table-field
+```
 
-Download and copy this repository to `/site/plugins/kirby-table-field`.
+### Manual
+
+[Download](https://api.github.com/repos/bogdancondorachi/kirby-table-field/zipball) and extract the folder to `/site/plugins/kirby-table-field`
 
 ## Usage
 
