@@ -52,32 +52,40 @@
           element="tbody"
           @end="onRowDrag"
         >
-          <tr v-for="(row, rowIndex) in rows" :key="rowIndex">
-            <!-- Index & drag handle -->
-            <td v-if="hasIndexColumn" :data-sortable="sortable && rows.length > 1" class="k-table-index-column">
-              <slot name="index">
-								<div class="k-table-index" v-text="index + rowIndex" />
-							</slot>
-              <k-sort-handle v-if="sortable && rows.length > 1" class="k-table-sort-handle" />
-            </td>
-            <!-- Cell -->
-            <td v-for="(column, columnIndex) in row" :key="columnIndex" class="k-table-column">
-              <k-text-input
-                v-model="row[columnIndex]"
-                @input="updateTable()"
-                type="text"
-              />
-            </td>
-            <!-- Options -->
-            <td class="k-table-options-column">
-              <k-button
-                :disabled="rows.length === 1"
-                title="Delete row"
-                icon="remove"
-                @click="deleteRow(rowIndex)"
-              />
-            </td>
-          </tr>
+          <!-- Empty -->
+				  <tr v-if="rows.length === 0">
+					  <td :colspan="colspan" class="k-table-empty">
+						  {{ empty }}
+					  </td>
+				  </tr>
+
+          <template v-else>
+            <tr v-for="(row, rowIndex) in rows" :key="rowIndex">
+              <!-- Index & drag handle -->
+              <td v-if="hasIndexColumn" :data-sortable="sortable && rows.length > 1" class="k-table-index-column">
+                <slot name="index">
+								  <div class="k-table-index" v-text="index + rowIndex" />
+							  </slot>
+                <k-sort-handle v-if="sortable && rows.length > 1" class="k-table-sort-handle" />
+              </td>
+              <!-- Cell -->
+              <td v-for="(column, columnIndex) in row" :key="columnIndex" class="k-table-column">
+                <k-text-input
+                  v-model="row[columnIndex]"
+                  @input="updateTable()"
+                  type="text"
+                />
+              </td>
+              <!-- Options -->
+              <td class="k-table-options-column">
+                <k-button
+                  title="Delete row"
+                  icon="remove"
+                  @click="deleteRow(rowIndex)"
+                />
+              </td>
+            </tr>
+          </template>
         </k-draggable>
       </table>
     </div>
@@ -104,6 +112,10 @@ export default {
     required: Boolean,
     value: [String, Array],
     
+    empty: {
+      type: String,
+      default: 'No rows yet'
+    },
     index: {
 			type: [Number, Boolean],
 			default: 1
@@ -128,6 +140,15 @@ export default {
     rows() {
       return this.tableData.slice(1);
     },
+    colspan() {
+			let span = this.columns.length + 1;
+
+			if (this.hasIndexColumn) {
+				span++;
+			}
+
+			return span;
+		},
     dragData() {
       return [...this.tableData];
     },
@@ -156,7 +177,7 @@ export default {
           .map(row => [...row])
         : this.value;
 
-      array ||= Array.from({ length: 4 }, () => Array(this.minColumns).fill(''));
+      array ||= Array.from({ length: 1 }, () => Array(this.minColumns).fill(''));
 
       return array;
     },
