@@ -1,7 +1,7 @@
 <template>
   <k-field v-bind="$props" class="k-table-field">
-    <div class="k-table">
-      <table :data-indexed="hasIndexColumn">
+    <div :aria-disabled="disabled" class="k-table">
+      <table :aria-disabled="disabled" :data-indexed="hasIndexColumn">
         <!-- Headers -->
         <thead>
           <k-draggable
