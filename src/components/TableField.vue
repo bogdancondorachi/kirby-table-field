@@ -1,7 +1,7 @@
 <template>
   <k-field v-bind="$props" class="k-table-field">
     <div :aria-disabled="disabled" class="k-table">
-      <table :aria-disabled="disabled" :data-indexed="hasIndexColumn">
+      <table :data-disabled="disabled" :data-indexed="hasIndexColumn">
         <!-- Headers -->
         <thead>
           <k-draggable
@@ -15,11 +15,11 @@
             <th
               v-for="(column, columnIndex) in columns"
               :key="columnIndex + '-header'"
-              :data-sortable="sortable && columns.length > 1"
+              :data-sortable="!disabled && sortable"
               class="k-table-column"
             >
               <div class="k-bar">
-                <k-sort-handle v-if="sortable && columns.length > 1" class="k-table-sort-handle" />
+                <k-sort-handle v-if="!disabled && sortable" class="k-table-sort-handle" />
                 <k-text-input
                   v-model="columns[columnIndex]"
                   @input="updateTable()"
@@ -27,6 +27,7 @@
                   type="text"
                 />
                 <k-button
+                  v-if="!disabled"
                   title="Delete column"
                   icon="remove"
                   v-show="columns.length > minColumns"
@@ -34,7 +35,7 @@
                 />
               </div>
             </th>
-            <th class="k-table-options-column">
+            <th v-if="!disabled" class="k-table-options-column">
               <k-button
                 :disabled="columns.length >= maxColumns"
                 title="Add column"
@@ -62,11 +63,11 @@
           <template v-else>
             <tr v-for="(row, rowIndex) in rows" :key="rowIndex">
               <!-- Index & drag handle -->
-              <td v-if="hasIndexColumn" :data-sortable="sortable && rows.length > 1" class="k-table-index-column">
+              <td v-if="hasIndexColumn" :data-sortable="!disabled && sortable && rows.length > 1" class="k-table-index-column">
                 <slot name="index">
 								  <div class="k-table-index" v-text="index + rowIndex" />
 							  </slot>
-                <k-sort-handle v-if="sortable && rows.length > 1" class="k-table-sort-handle" />
+                <k-sort-handle v-if="!disabled && sortable && rows.length > 1" class="k-table-sort-handle" />
               </td>
               <!-- Cell -->
               <td v-for="(column, columnIndex) in row" :key="columnIndex" class="k-table-column">
@@ -77,7 +78,7 @@
                 />
               </td>
               <!-- Options -->
-              <td class="k-table-options-column">
+              <td v-if="!disabled" class="k-table-options-column">
                 <k-button
                   title="Delete row"
                   icon="remove"
@@ -90,7 +91,7 @@
       </table>
     </div>
     <!-- Footer -->
-    <footer data-align="center" class="k-bar">
+    <footer v-if="!disabled" data-align="center" class="k-bar">
       <k-button
         title="Add row"
         icon="add"
