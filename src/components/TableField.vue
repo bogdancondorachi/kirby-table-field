@@ -1,7 +1,7 @@
 <template>
   <k-field v-bind="$props" class="k-table-field">
     <div class="k-table">
-      <table>
+      <table :data-indexed="hasIndexColumn">
         <!-- Headers -->
         <thead>
           <k-draggable
@@ -154,6 +154,7 @@ export default {
     },
     dragOptions() {
 			return {
+        disabled: !this.sortable,
 				fallbackClass: "k-table-row-fallback",
 				ghostClass: "k-table-row-ghost"
 			};
