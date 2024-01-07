@@ -1,5 +1,15 @@
 <template>
   <k-field v-bind="$props" class="k-table-field">
+    <template v-if="!disabled" #options>
+			<k-button
+        :disabled="columns.length >= maxColumns"
+				text="Column"
+				icon="add"
+				variant="filled"
+				size="xs"
+				@click="addColumn()"
+			/>
+		</template>
     <div :aria-disabled="disabled" class="k-table">
       <table :data-disabled="disabled" :data-indexed="hasIndexColumn">
         <!-- Headers -->
@@ -45,14 +55,7 @@
 								/>
               </div>
             </th>
-            <th v-if="!disabled" class="k-table-options-column">
-              <k-button
-                :disabled="columns.length >= maxColumns"
-                title="Add column"
-                icon="add"
-                @click="addColumn()"
-              />
-            </th>
+            <th v-if="!disabled" class="k-table-options-column"></th>
           </k-draggable>
         </thead>
         <!-- Rows -->
@@ -112,7 +115,7 @@
     <!-- Footer -->
     <footer v-if="!disabled" data-align="center" class="k-bar">
       <k-button
-        title="Add row"
+        text="Row"
         icon="add"
         size="xs"
         variant="filled"
