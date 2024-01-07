@@ -26,13 +26,23 @@
                   :placeholder="`Column ${columnIndex + 1}`"
                   type="text"
                 />
-                <k-button
-                  v-if="!disabled"
-                  title="Delete column"
-                  icon="remove"
-                  v-show="columns.length > minColumns"
-                  @click="deleteColumn(columnIndex)"
-                />
+                <!-- Options -->
+                <k-options-dropdown v-if="!disabled"
+                  :options="[
+						        {
+							        click: () => duplicateColumn(columnIndex),
+                      disabled: columns.length >= maxColumns,
+							        icon: 'copy',
+							        text: $t('duplicate')
+						        },
+						        {
+							        click: () => deleteColumn(columnIndex),
+                      disabled: columns.length <= minColumns,
+							        icon: 'trash',
+							        text: $t('delete')
+						        }
+					        ]"
+								/>
               </div>
             </th>
             <th v-if="!disabled" class="k-table-options-column">
@@ -79,11 +89,20 @@
               </td>
               <!-- Options -->
               <td v-if="!disabled" class="k-table-options-column">
-                <k-button
-                  title="Delete row"
-                  icon="remove"
-                  @click="deleteRow(rowIndex)"
-                />
+                <k-options-dropdown
+                  :options="[
+						        {
+							        click: () => duplicateRow(rowIndex),
+							        icon: 'copy',
+							        text: $t('duplicate')
+						        },
+						        {
+							        click: () => deleteRow(rowIndex),
+							        icon: 'trash',
+							        text: $t('delete')
+						        }
+					        ]"
+								/>
               </td>
             </tr>
           </template>
@@ -112,7 +131,7 @@ export default {
     disabled: Boolean,
     required: Boolean,
     value: [String, Array],
-    
+
     empty: {
       type: String,
       default: 'No rows yet'
@@ -218,6 +237,15 @@ export default {
     },
     deleteRow(rowIndex) {
       this.tableData.splice(rowIndex + 1, 1);
+      this.updateTable();
+    },
+    duplicateColumn(columnIndex) {
+      this.columns.splice(columnIndex + 1, 0, this.columns[columnIndex]);
+      this.rows.forEach((row) => row.splice(columnIndex + 1, 0, row[columnIndex]));
+      this.updateTable();
+    },
+    duplicateRow(rowIndex) {
+      this.tableData.splice(rowIndex + 1, 0, [...this.tableData[rowIndex + 1]]);
       this.updateTable();
     },
     updateTable() {
