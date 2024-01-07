@@ -10,18 +10,21 @@
 				@click="addColumn()"
 			/>
 		</template>
+
     <div :aria-disabled="disabled" class="k-table">
       <table :data-disabled="disabled" :data-indexed="hasIndexColumn">
-        <!-- Headers -->
+        <!-- Header Row -->
         <thead>
           <k-draggable
-            :list="dragData"
+            :list="values"
             :options="dragOptions"
             :handle="true"
             element="tr"
             @end="onColumnDrag"
           >
             <th v-if="hasIndexColumn" class="k-table-index-column">#</th>
+
+            <!-- Columns -->
             <th
               v-for="(column, columnIndex) in columns"
               :key="columnIndex + '-header'"
@@ -36,7 +39,7 @@
                   :placeholder="`Column ${columnIndex + 1}`"
                   type="text"
                 />
-                <!-- Options -->
+                <!-- Column Options -->
                 <k-options-dropdown v-if="!disabled"
                   :options="[
 						        {
@@ -46,7 +49,7 @@
 							        text: $t('duplicate')
 						        },
 						        {
-							        click: () => deleteColumn(columnIndex),
+							        click: () => removeColumn(columnIndex),
                       disabled: columns.length <= minColumns,
 							        icon: 'trash',
 							        text: $t('delete')
@@ -55,12 +58,14 @@
 								/>
               </div>
             </th>
+
             <th v-if="!disabled" class="k-table-options-column"></th>
           </k-draggable>
         </thead>
+
         <!-- Rows -->
         <k-draggable
-          :list="dragData"
+          :list="values"
           :options="dragOptions"
           :handle="true"
           element="tbody"
@@ -69,7 +74,7 @@
           <!-- Empty -->
 				  <tr v-if="rows.length === 0">
 					  <td :colspan="colspan" class="k-table-empty">
-						  {{ empty }}
+						  {{ empty ?? 'No rows yet' }}
 					  </td>
 				  </tr>
 
@@ -77,11 +82,10 @@
             <tr v-for="(row, rowIndex) in rows" :key="rowIndex">
               <!-- Index & drag handle -->
               <td v-if="hasIndexColumn" :data-sortable="!disabled && sortable && rows.length > 1" class="k-table-index-column">
-                <slot name="index">
-								  <div class="k-table-index" v-text="index + rowIndex" />
-							  </slot>
+								<div class="k-table-index" v-text="index + rowIndex" />
                 <k-sort-handle v-if="!disabled && sortable && rows.length > 1" class="k-table-sort-handle" />
               </td>
+
               <!-- Cell -->
               <td v-for="(column, columnIndex) in row" :key="columnIndex" class="k-table-column">
                 <k-text-input
@@ -90,7 +94,8 @@
                   type="text"
                 />
               </td>
-              <!-- Options -->
+
+              <!-- Row Options -->
               <td v-if="!disabled" class="k-table-options-column">
                 <k-options-dropdown
                   :options="[
@@ -100,7 +105,7 @@
 							        text: $t('duplicate')
 						        },
 						        {
-							        click: () => deleteRow(rowIndex),
+							        click: () => removeRow(rowIndex),
 							        icon: 'trash',
 							        text: $t('delete')
 						        }
@@ -112,6 +117,7 @@
         </k-draggable>
       </table>
     </div>
+
     <!-- Footer -->
     <footer v-if="!disabled" data-align="center" class="k-bar">
       <k-button
@@ -131,14 +137,11 @@ export default {
     label: String,
     type: String,
     help: String,
+    empty: String,
     disabled: Boolean,
     required: Boolean,
     value: [String, Array],
 
-    empty: {
-      type: String,
-      default: 'No rows yet'
-    },
     index: {
 			type: [Number, Boolean],
 			default: 1
@@ -157,6 +160,9 @@ export default {
     }
   },
   computed: {
+    values() {
+      return [...this.tableData];
+    },
     columns() {
       return this.tableData[0];
     },
@@ -172,9 +178,6 @@ export default {
 
 			return span;
 		},
-    dragData() {
-      return [...this.tableData];
-    },
     dragOptions() {
 			return {
         disabled: !this.sortable,
@@ -186,15 +189,15 @@ export default {
 			return this.sortable || this.index !== false;
 		},
     tableData() {
-      const clearValue = (input) => input.trim().replace(/^- /, "").replace(/^[\"\'](.*)[\"\']$/g, "$1");
-      const isRowBreak = (input) => input === '- ';
+      const clearValue = (value) => value.trim().replace(/^- /, "").replace(/^[\"\'](.*)[\"\']$/g, "$1");
+      const isRowBreak = (value) => value === '- ';
 
       let array = typeof this.value === 'string'
         ? this.value.split('\n')
-          .reduce((row, input) => (
-            isRowBreak(input)
+          .reduce((row, value) => (
+            isRowBreak(value)
               ? row.push([])
-              : row[row.length - 1].push(clearValue(input)),
+              : row[row.length - 1].push(clearValue(value)),
             row
           ), [])
           .filter(row => row.length > 0)
@@ -234,11 +237,11 @@ export default {
       this.tableData.forEach((column) => column.push(""));
       this.updateTable();
     },
-    deleteColumn(columnIndex) {
+    removeColumn(columnIndex) {
       this.tableData.forEach((column) => column.splice(columnIndex, 1));
       this.updateTable();
     },
-    deleteRow(rowIndex) {
+    removeRow(rowIndex) {
       this.tableData.splice(rowIndex + 1, 1);
       this.updateTable();
     },

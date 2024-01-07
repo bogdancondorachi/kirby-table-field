@@ -15,18 +15,18 @@ Kirby::plugin('bogdancondorachi/table-field', [
         $array = str::split($field, "\n");
         $newRow = $rows = [];
   
-        foreach ($array as $element) {
-          $element = trim($element);
+        foreach ($array as $value) {
+          $value = trim($value);
 
-          if ($element === '-') {
+          if ($value === '-') {
             if (!empty($newRow)) {
               $rows[] = $newRow;
               $newRow = [];
             }
           } else {
-            $element = trim($element, '- ');
-            $element = trim($element, '"\'');
-            $newRow[] = $element;
+            $value = trim($value, '- ');
+            $value = trim($value, '"\'');
+            $newRow[] = $value;
           }
         }
 
