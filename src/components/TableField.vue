@@ -42,6 +42,18 @@
                 <!-- Column Options -->
                 <k-options-dropdown v-if="!disabled"
                   :options="[
+                    {
+							        click: () => insertColumn(columnIndex, 'before'),
+                      disabled: columns.length >= maxColumns,
+							        icon: 'angle-left',
+							        text: $t('insert.before')
+						        },
+                    {
+							        click: () => insertColumn(columnIndex, 'after'),
+                      disabled: columns.length >= maxColumns,
+							        icon: 'angle-right',
+							        text: $t('insert.after')
+						        },
 						        {
 							        click: () => duplicateColumn(columnIndex),
                       disabled: columns.length >= maxColumns,
@@ -99,6 +111,16 @@
               <td v-if="!disabled" class="k-table-options-column">
                 <k-options-dropdown
                   :options="[
+                    {
+							        click: () => insertRow(rowIndex, 'before'),
+							        icon: 'angle-up',
+							        text: $t('insert.before')
+						        },
+                    {
+							        click: () => insertRow(rowIndex, 'after'),
+							        icon: 'angle-down',
+							        text: $t('insert.after')
+						        },
 						        {
 							        click: () => duplicateRow(rowIndex),
 							        icon: 'copy',
@@ -243,6 +265,17 @@ export default {
     },
     removeRow(rowIndex) {
       this.tableData.splice(rowIndex + 1, 1);
+      this.updateTable();
+    },
+    insertColumn(columnIndex, insert = "before") {
+      const insertIndex = insert === "before" ? columnIndex : columnIndex + 1;
+      this.columns.splice(insertIndex, 0, '');
+      this.rows.forEach((row) => row.splice(insertIndex, 0, ''));
+      this.updateTable();
+    },
+    insertRow(rowIndex, insert = "before") {
+      const insertIndex = insert === "before" ? rowIndex + 1 : rowIndex + 2;
+      this.tableData.splice(insertIndex, 0, Array(this.columns.length).fill(''));
       this.updateTable();
     },
     duplicateColumn(columnIndex) {
