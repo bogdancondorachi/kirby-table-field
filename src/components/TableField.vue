@@ -24,7 +24,7 @@
           >
             <th v-if="hasIndexColumn" class="k-table-index-column">#</th>
 
-            <!-- Columns -->
+            <!-- Header Column -->
             <th
               v-for="(column, columnIndex) in columns"
               :key="columnIndex + '-header'"
@@ -39,34 +39,10 @@
                   :placeholder="`Column ${columnIndex + 1}`"
                   type="text"
                 />
-                <!-- Column Options -->
+                <!-- Options -->
                 <k-options-dropdown v-if="!disabled"
-                  :options="[
-                    {
-							        click: () => insertColumn(columnIndex, 'before'),
-                      disabled: columns.length >= maxColumns,
-							        icon: 'angle-left',
-							        text: $t('insert.before')
-						        },
-                    {
-							        click: () => insertColumn(columnIndex, 'after'),
-                      disabled: columns.length >= maxColumns,
-							        icon: 'angle-right',
-							        text: $t('insert.after')
-						        },
-						        {
-							        click: () => duplicateColumn(columnIndex),
-                      disabled: columns.length >= maxColumns,
-							        icon: 'copy',
-							        text: $t('duplicate')
-						        },
-						        {
-							        click: () => removeColumn(columnIndex),
-                      disabled: columns.length <= minColumns,
-							        icon: 'trash',
-							        text: $t('delete')
-						        }
-					        ]"
+                  :options="columnOptions"
+                  @option="columnOption($event, columnIndex)"
 								/>
               </div>
             </th>
@@ -98,7 +74,7 @@
                 <k-sort-handle v-if="!disabled && sortable && rows.length > 1" class="k-table-sort-handle" />
               </td>
 
-              <!-- Cell -->
+              <!-- Column -->
               <td v-for="(column, columnIndex) in row" :key="columnIndex" class="k-table-column">
                 <k-text-input
                   v-model="row[columnIndex]"
@@ -107,31 +83,11 @@
                 />
               </td>
 
-              <!-- Row Options -->
+              <!-- Options -->
               <td v-if="!disabled" class="k-table-options-column">
                 <k-options-dropdown
-                  :options="[
-                    {
-							        click: () => insertRow(rowIndex, 'before'),
-							        icon: 'angle-up',
-							        text: $t('insert.before')
-						        },
-                    {
-							        click: () => insertRow(rowIndex, 'after'),
-							        icon: 'angle-down',
-							        text: $t('insert.after')
-						        },
-						        {
-							        click: () => duplicateRow(rowIndex),
-							        icon: 'copy',
-							        text: $t('duplicate')
-						        },
-						        {
-							        click: () => removeRow(rowIndex),
-							        icon: 'trash',
-							        text: $t('delete')
-						        }
-					        ]"
+                  :options="rowOptions"
+                  @option="rowOption($event, rowIndex)"
 								/>
               </td>
             </tr>
@@ -200,13 +156,6 @@ export default {
 
 			return span;
 		},
-    dragOptions() {
-			return {
-        disabled: !this.sortable,
-				fallbackClass: "k-table-row-fallback",
-				ghostClass: "k-table-row-ghost"
-			};
-		},
     hasIndexColumn() {
 			return this.sortable || this.index !== false;
 		},
@@ -230,8 +179,103 @@ export default {
 
       return array;
     },
+    dragOptions() {
+			return {
+        disabled: !this.sortable,
+				fallbackClass: "k-table-row-fallback",
+				ghostClass: "k-table-row-ghost"
+			};
+		},
+    columnOptions() {
+      return [
+        {
+          disabled: this.columns.length >= this.maxColumns,
+          icon: "angle-left",
+          text: this.$t("insert.before"),
+          click: "insertBefore"
+        },
+        {
+          disabled: this.columns.length >= this.maxColumns,
+          icon: "angle-right",
+          text: this.$t("insert.after"),
+          click: "insertAfter"
+        },
+        "-",
+        {
+          disabled: this.columns.length >= this.maxColumns,
+          icon: "copy",
+          text: this.$t("duplicate"),
+          click: "duplicate"
+        },
+        "-",
+        {
+          disabled: this.columns.length <= this.minColumns,
+          icon: "trash",
+          text: this.$t("delete"),
+          click: "remove"
+        }
+      ];
+    },
+    rowOptions() {
+      return [
+        {
+          icon: "angle-up",
+          text: this.$t("insert.before"),
+          click: "insertBefore"
+        },
+        {
+          icon: "angle-down",
+          text: this.$t("insert.after"),
+          click: "insertAfter"
+        },
+        "-",
+        {
+          icon: "copy",
+          text: this.$t("duplicate"),
+          click: "duplicate"
+        },
+        "-",
+        {
+          icon: "trash",
+          text: this.$t("delete"),
+          click: "remove"
+        }
+      ];
+    },
   },
   methods: {
+    columnOption(option, columnIndex) {
+      switch (option) {
+        case "insertBefore":
+          this.insertColumn(columnIndex, 'before')
+          break;
+        case "insertAfter":
+          this.insertColumn(columnIndex, 'after')
+          break;
+        case "duplicate":
+          this.duplicateColumn(columnIndex)
+          break;
+        case "remove":
+          this.removeColumn(columnIndex);
+          break;
+      }
+    },
+    rowOption(option, rowIndex) {
+      switch (option) {
+        case "insertBefore":
+          this.insertRow(rowIndex, 'before')
+          break;
+        case "insertAfter":
+          this.insertRow(rowIndex, 'after')
+          break;
+        case "duplicate":
+          this.duplicateRow(rowIndex)
+          break;
+        case "remove":
+          this.removeRow(rowIndex);
+          break;
+      }
+    },
     moveArray(array, oldIndex, newIndex) {
       const [movedIndex] = array.splice(oldIndex, 1);
       array.splice(newIndex, 0, movedIndex);
