@@ -1,14 +1,27 @@
 <template>
   <k-field v-bind="$props" class="k-table-field">
     <template v-if="!disabled" #options>
-			<k-button
-        :disabled="columns.length >= maxColumns"
-				text="Column"
-				icon="add"
-				variant="filled"
-				size="xs"
-				@click="addColumn()"
-			/>
+      <k-button-group layout="collapsed">
+			  <k-button
+          :disabled="columns.length >= maxColumns"
+				  text="Column"
+				  icon="add"
+				  variant="filled"
+				  size="xs"
+				  @click="addColumn()"
+			  />
+        <k-button
+					icon="dots"
+					size="xs"
+					variant="filled"
+					@click="$refs.options.toggle()"
+				/>
+				<k-dropdown-content
+					ref="options"
+					:options="options"
+					align-x="end"
+				/>
+      </k-button-group>
 		</template>
 
     <div :aria-disabled="disabled" class="k-table">
@@ -190,6 +203,16 @@ export default {
 				ghostClass: "k-table-row-ghost"
 			};
 		},
+    options() {
+      return [
+				{
+					click: () => this.removeAll(),
+          disabled: this.rows.length === 0 && this.columns.length <= this.minColumns,
+					icon: 'trash',
+					text: this.$t('delete.all')
+				}
+      ];
+    },
     columnOptions() {
       return [
         {
@@ -334,6 +357,22 @@ export default {
     duplicateRow(rowIndex) {
       this.tableData.splice(rowIndex + 1, 0, [...this.tableData[rowIndex + 1]]);
       this.updateTable();
+    },
+    removeAll() {
+      this.$panel.dialog.open({
+				component: "k-remove-dialog",
+				props: {
+					text: this.$t("field.structure.delete.confirm.all")
+				},
+				on: {
+					submit: () => {
+						this.columns.splice(0, this.columns.length, ...Array.from({ length: this.minColumns }, () => ''));
+            this.tableData.splice(0, this.tableData.length, ...[Array(this.minColumns).fill('')]);
+						this.updateTable();
+						this.$panel.dialog.close();
+					}
+				}
+			});
     },
     updateTable() {
       this.$emit('input', this.tableData);
