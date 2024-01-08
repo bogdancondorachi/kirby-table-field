@@ -29,9 +29,9 @@
               v-for="(column, columnIndex) in columns"
               :key="columnIndex + '-header'"
               :data-sortable="!disabled && sortable"
-              class="k-table-column"
+              class="k-table-column k-table-header"
             >
-              <div class="k-bar">
+              <k-bar>
                 <k-sort-handle v-if="!disabled && sortable" class="k-table-sort-handle" />
                 <k-text-input
                   v-model="columns[columnIndex]"
@@ -44,10 +44,10 @@
                   :options="columnOptions"
                   @option="columnOption($event, columnIndex)"
 								/>
-              </div>
+              </k-bar>
             </th>
 
-            <th v-if="!disabled" class="k-table-options-column"></th>
+            <th v-if="!disabled && rows.length !== 0" class="k-table-options-column"></th>
           </k-draggable>
         </thead>
 
@@ -75,7 +75,7 @@
               </td>
 
               <!-- Column -->
-              <td v-for="(column, columnIndex) in row" :key="columnIndex" class="k-table-column">
+              <td v-for="(column, columnIndex) in row" :key="columnIndex" class="k-table-column k-table-cell">
                 <k-text-input
                   v-model="row[columnIndex]"
                   @input="updateTable()"
@@ -97,7 +97,7 @@
     </div>
 
     <!-- Footer -->
-    <footer v-if="!disabled" data-align="center" class="k-bar">
+    <footer v-if="!disabled">
       <k-button
         text="Row"
         icon="add"
@@ -128,6 +128,10 @@ export default {
       type: Boolean,
       default: true
     },
+    duplicate: {
+      type: Boolean,
+      default: true
+    },
     minColumns: {
       type: Number,
       default: 2
@@ -148,7 +152,7 @@ export default {
       return this.tableData.slice(1);
     },
     colspan() {
-			let span = this.columns.length + 1;
+			let span = this.columns.length;
 
 			if (this.hasIndexColumn) {
 				span++;
@@ -175,7 +179,7 @@ export default {
           .map(row => [...row])
         : this.value;
 
-      array ||= Array.from({ length: 1 }, () => Array(this.minColumns).fill(''));
+      array ||= Array.from({ length: 2 }, () => Array(this.minColumns).fill(''));
 
       return array;
     },
@@ -202,7 +206,7 @@ export default {
         },
         "-",
         {
-          disabled: this.columns.length >= this.maxColumns,
+          disabled: !this.duplicate || this.columns.length >= this.maxColumns,
           icon: "copy",
           text: this.$t("duplicate"),
           click: "duplicate"
@@ -230,6 +234,7 @@ export default {
         },
         "-",
         {
+          disabled: !this.duplicate,
           icon: "copy",
           text: this.$t("duplicate"),
           click: "duplicate"
@@ -277,8 +282,7 @@ export default {
       }
     },
     moveArray(array, oldIndex, newIndex) {
-      const [movedIndex] = array.splice(oldIndex, 1);
-      array.splice(newIndex, 0, movedIndex);
+      array.splice(newIndex, 0, ...array.splice(oldIndex, 1));
     },
     moveColumn(oldIndex, newIndex) {
       this.moveArray(this.columns, oldIndex, newIndex);
