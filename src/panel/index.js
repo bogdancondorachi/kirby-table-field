@@ -1,4 +1,4 @@
-import './assets/css/layout.scss'
+import './index.scss'
 import TableField from "./components/TableField.vue"
 
 panel.plugin('bogdancondorachi/table-field', {

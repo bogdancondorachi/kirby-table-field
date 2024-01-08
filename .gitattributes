@@ -4,7 +4,7 @@
 .gitignore export-ignore
 
 # Source files
-src/ export-ignore
+src/panel/ export-ignore
 
 # Development files
 .editorconfig export-ignore
