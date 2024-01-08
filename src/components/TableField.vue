@@ -4,7 +4,7 @@
       <k-button-group layout="collapsed">
 			  <k-button
           :disabled="columns.length >= maxColumns"
-				  text="Column"
+				  :text="$t('field.table.column')"
 				  icon="add"
 				  variant="filled"
 				  size="xs"
@@ -49,7 +49,7 @@
                 <k-text-input
                   v-model="columns[columnIndex]"
                   @input="updateTable()"
-                  :placeholder="`Column ${columnIndex + 1}`"
+                  :placeholder="`${$t('field.table.column')} ${columnIndex + 1}`"
                   type="text"
                 />
                 <!-- Options -->
@@ -75,7 +75,7 @@
           <!-- Empty -->
 				  <tr v-if="rows.length === 0">
 					  <td :colspan="colspan" class="k-table-empty">
-						  {{ empty ?? 'No rows yet' }}
+						  {{ empty ?? $t('field.table.empty.rows') }}
 					  </td>
 				  </tr>
 
@@ -112,7 +112,7 @@
     <!-- Footer -->
     <footer v-if="!disabled">
       <k-button
-        text="Row"
+        :text="$t('field.table.row')"
         icon="add"
         size="xs"
         variant="filled"
@@ -334,7 +334,7 @@ export default {
       this.$panel.dialog.open({
 				component: "k-remove-dialog",
 				props: {
-					text: 'Do you really want to delete this column?'
+					text: this.$t('field.table.delete.confirm.column')
 				},
 				on: {
 					submit: () => {
@@ -349,7 +349,7 @@ export default {
       this.$panel.dialog.open({
 				component: "k-remove-dialog",
 				props: {
-					text: 'Do you really want to delete this row?'
+					text: this.$t('field.table.delete.confirm.row')
 				},
 				on: {
 					submit: () => {
@@ -384,7 +384,7 @@ export default {
       this.$panel.dialog.open({
 				component: "k-remove-dialog",
 				props: {
-					text: 'Do you really want to delete all entries?'
+					text: this.$t('field.table.delete.confirm.all')
 				},
 				on: {
 					submit: () => {

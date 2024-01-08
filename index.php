@@ -4,6 +4,8 @@ Kirby::plugin('bogdancondorachi/table-field', [
   'fields' => [
     'table' => []
   ],
+
+  'translations' => require __DIR__ . '/src/extensions/translations.php',
   
   'fieldMethods' => [
     'toTable' => function ($field) {
