@@ -331,12 +331,34 @@ export default {
       this.updateTable();
     },
     removeColumn(columnIndex) {
-      this.tableData.forEach((column) => column.splice(columnIndex, 1));
-      this.updateTable();
+      this.$panel.dialog.open({
+				component: "k-remove-dialog",
+				props: {
+					text: 'Do you really want to delete this column?'
+				},
+				on: {
+					submit: () => {
+						this.tableData.forEach((column) => column.splice(columnIndex, 1));
+            this.updateTable();
+						this.$panel.dialog.close();
+					}
+				}
+			});
     },
     removeRow(rowIndex) {
-      this.tableData.splice(rowIndex + 1, 1);
-      this.updateTable();
+      this.$panel.dialog.open({
+				component: "k-remove-dialog",
+				props: {
+					text: 'Do you really want to delete this row?'
+				},
+				on: {
+					submit: () => {
+						this.tableData.splice(rowIndex + 1, 1);
+            this.updateTable();
+						this.$panel.dialog.close();
+					}
+				}
+			});
     },
     insertColumn(columnIndex, insert = "before") {
       const insertIndex = insert === "before" ? columnIndex : columnIndex + 1;
@@ -362,7 +384,7 @@ export default {
       this.$panel.dialog.open({
 				component: "k-remove-dialog",
 				props: {
-					text: this.$t("field.structure.delete.confirm.all")
+					text: 'Do you really want to delete all entries?'
 				},
 				on: {
 					submit: () => {
