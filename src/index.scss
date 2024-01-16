@@ -3,11 +3,13 @@
     position: relative;
 
     .k-table-column {
+      padding: 0;
       overflow: initial;
     }
 
     thead {
       .k-table-header {
+        padding: 0 var(--spacing-2);
         .k-button {
           color: initial;
           width: var(--button-width);
@@ -23,13 +25,17 @@
         .k-text-input {
           padding: var(--spacing-2) 0;
         }
-        .k-dropdown-content .k-button {
-          font-family: var(--font-sans);
-          font-size: var(--text-sm);
-          color: var(--button-color-text);
-          height: var(--button-height);
-          border-radius: var(--button-rounded);
-          padding-inline: var(--button-padding);
+        .k-dropdown-content {
+          margin-top: 8px;
+          margin-left: 6px;
+          .k-button {
+            font-family: var(--font-sans);
+            font-size: var(--text-sm);
+            color: var(--button-color-text);
+            height: var(--button-height);
+            border-radius: var(--button-rounded);
+            padding-inline: var(--button-padding);
+          }
         }
         &:has(.k-options-dropdown > dialog),
         &:has(.k-text-input:focus) {

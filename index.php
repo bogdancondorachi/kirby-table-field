@@ -5,43 +5,7 @@ Kirby::plugin('bogdancondorachi/table-field', [
     'table' => []
   ],
 
-  'translations' => require __DIR__ . '/src/extensions/translations.php',
-  
-  'fieldMethods' => [
-    'toTable' => function ($field) {
-      if ($field->value() === null) {
-        return ['headers' => [], 'rows' => []];
-      }
+  'fieldMethods' => require_once __DIR__ . '/lib/methods.php',
 
-      if (is_string($field->value())) {
-        $array = str::split($field, "\n");
-        $newRow = $rows = [];
-  
-        foreach ($array as $value) {
-          $value = trim($value);
-
-          if ($value === '-') {
-            if (!empty($newRow)) {
-              $rows[] = $newRow;
-              $newRow = [];
-            }
-          } else {
-            $value = trim($value, '- ');
-            $value = trim($value, '"\'');
-            $newRow[] = $value;
-          }
-        }
-
-        $rows[] = $newRow;
-
-        $blueprint = $field->parent()->blueprint()->field($field->key());
-        $hasHeaders = $blueprint['headers'] ?? true;
-        $headers = $hasHeaders ? array_shift($rows) : [];
-  
-        return ['headers' => $headers, 'rows' => $rows];
-      } else {
-        return $field->toArray()[$field->key()];
-      }
-    }
-  ]
+  'translations' => require_once __DIR__ . '/lib/translations.php'
 ]);
