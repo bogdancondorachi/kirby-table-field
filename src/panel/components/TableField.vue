@@ -363,37 +363,6 @@ export default {
       this.tableData.forEach((column) => column.push(""));
       this.updateTable();
     },
-    removeColumn(columnIndex) {
-      this.$panel.dialog.open({
-				component: "k-remove-dialog",
-				props: {
-					text: this.$t('field.table.delete.confirm.column')
-				},
-				on: {
-					submit: () => {
-						this.tableData.forEach((column) => column.splice(columnIndex, 1));
-            this.updateTable();
-						this.$panel.dialog.close();
-					}
-				}
-			});
-    },
-    removeRow(rowIndex) {
-      this.$panel.dialog.open({
-				component: "k-remove-dialog",
-				props: {
-					text: this.$t('field.table.delete.confirm.row')
-				},
-				on: {
-					submit: () => {
-            const currentIndex = this.hasHeaders ? rowIndex + 1 : rowIndex;
-						this.tableData.splice(currentIndex, 1);
-            this.updateTable();
-						this.$panel.dialog.close();
-					}
-				}
-			});
-    },
     insertColumn(columnIndex, insert = "before") {
       const insertIndex = insert === "before" ? columnIndex : columnIndex + 1;
       this.columns.splice(insertIndex, 0, '');
@@ -425,21 +394,37 @@ export default {
       this.tableData.splice(currentIndex, 0, [...this.tableData[currentIndex]]);
       this.updateTable();
     },
-    removeAll() {
+    showDialog(text, callback) {
       this.$panel.dialog.open({
-				component: "k-remove-dialog",
-				props: {
-					text: this.$t('field.table.delete.confirm.all')
-				},
-				on: {
-					submit: () => {
-						this.columns.splice(0, this.columns.length, ...Array.from({ length: this.minColumns }, () => ''));
-            this.tableData.splice(0, this.tableData.length, ...[Array(this.minColumns).fill('')]);
-						this.updateTable();
-						this.$panel.dialog.close();
-					}
-				}
-			});
+        component: "k-remove-dialog",
+        props: { text },
+        on: {
+          submit: () => {
+            callback();
+            this.$panel.dialog.close();
+          }
+        }
+      });
+    },
+    removeColumn(columnIndex) {
+      this.showDialog(this.$t('field.table.delete.confirm.column'), () => {
+        this.tableData.forEach((column) => column.splice(columnIndex, 1));
+        this.updateTable();
+      });
+    },
+    removeRow(rowIndex) {
+      this.showDialog(this.$t('field.table.delete.confirm.row'), () => {
+        const currentIndex = this.hasHeaders ? rowIndex + 1 : rowIndex;
+        this.tableData.splice(currentIndex, 1);
+        this.updateTable();
+      });
+    },
+    removeAll() {
+      this.showDialog(this.$t('field.table.delete.confirm.all'), () => {
+        this.columns.splice(0, this.columns.length, ...Array.from({ length: this.minColumns }, () => ''));
+        this.tableData.splice(0, this.tableData.length, ...[Array(this.minColumns).fill('')]);
+        this.updateTable();
+      });
     },
     updateTable() {
       this.$emit('input', this.tableData);
