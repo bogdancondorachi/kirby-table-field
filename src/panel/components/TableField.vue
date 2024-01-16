@@ -243,6 +243,11 @@ export default {
         },
         "-",
         {
+          icon: "eraser",
+          text: this.$t("field.table.clear"),
+          click: "clear"
+        },
+        {
           disabled: !this.duplicate || this.columns.length >= this.maxColumns,
           icon: "copy",
           text: this.$t("duplicate"),
@@ -271,6 +276,11 @@ export default {
         },
         "-",
         {
+          icon: "eraser",
+          text: this.$t("field.table.clear"),
+          click: "clear"
+        },
+        {
           disabled: !this.duplicate,
           icon: "copy",
           text: this.$t("duplicate"),
@@ -295,6 +305,9 @@ export default {
         case "insertAfter":
           this.insertColumn(columnIndex, 'after')
           break;
+        case "clear":
+          this.clearColumn(columnIndex)
+          break;
         case "duplicate":
           this.duplicateColumn(columnIndex)
           break;
@@ -310,6 +323,9 @@ export default {
           break;
         case "insertAfter":
           this.insertRow(rowIndex, 'after')
+          break;
+        case "clear":
+          this.clearRow(rowIndex)
           break;
         case "duplicate":
           this.duplicateRow(rowIndex)
@@ -388,6 +404,15 @@ export default {
       const currentIndex = this.hasHeaders ? rowIndex + 1 : rowIndex;
       const insertIndex = insert === "before" ? currentIndex : currentIndex + 1;
       this.tableData.splice(insertIndex, 0, Array(this.columns.length).fill(''));
+      this.updateTable();
+    },
+    clearColumn(columnIndex) {
+      this.tableData.forEach((row) => {row[columnIndex] = ''});
+      this.updateTable();
+    },
+    clearRow(rowIndex) {
+      const currentIndex = this.hasHeaders ? rowIndex + 1 : rowIndex;
+      this.tableData[currentIndex].fill('');
       this.updateTable();
     },
     duplicateColumn(columnIndex) {
