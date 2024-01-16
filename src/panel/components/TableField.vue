@@ -47,11 +47,13 @@
               <k-bar>
                 <k-sort-handle v-if="!disabled && sortable" class="k-table-sort-handle" />
                 <k-text-input
+                  v-if="hasHeaders"
                   v-model="columns[columnIndex]"
                   @input="updateTable()"
                   :placeholder="`${$t('field.table.column')} ${columnIndex + 1}`"
                   type="text"
                 />
+                <k-text v-else>{{ $t('field.table.column') }} {{ columnIndex + 1 }}</k-text>
                 <!-- Options -->
                 <k-options-dropdown v-if="!disabled"
                   :options="columnOptions"
@@ -125,26 +127,25 @@
 <script>
 export default {
   props: {
-    label: String,
-    type: String,
-    help: String,
-    empty: String,
     disabled: Boolean,
+    empty: String,
+    help: String,
+    label: String,
     required: Boolean,
-    value: [String, Array],
+    type: String,
 
-    index: {
-			type: [Number, Boolean],
-			default: 1
-		},
-    sortable: {
-      type: Boolean,
-      default: true
-    },
     duplicate: {
       type: Boolean,
       default: true
     },
+    headers: {
+      type: Boolean,
+      default: true
+    },
+    index: {
+			type: [Number, Boolean],
+			default: 1
+		},
     minColumns: {
       type: Number,
       default: 2
@@ -152,17 +153,26 @@ export default {
     maxColumns: {
       type: Number,
       default: 5
-    }
+    },
+    sortable: {
+      type: Boolean,
+      default: true
+    },
+    value: [String, Array]
   },
   computed: {
     values() {
       return [...this.tableData];
     },
     columns() {
-      return this.tableData[0];
+      return this.hasHeaders
+        ? this.tableData[0]
+        : this.tableData[0].length > 0
+          ? Array(this.tableData[0].length).fill('')
+          : Array(this.minColumns).fill('');
     },
     rows() {
-      return this.tableData.slice(1);
+      return this.hasHeaders ? this.tableData.slice(1) : this.tableData;
     },
     colspan() {
 			let span = this.columns.length;
@@ -173,12 +183,16 @@ export default {
 
 			return span;
 		},
+    hasHeaders() {
+      return this.headers;
+    },
     hasIndexColumn() {
 			return this.sortable || this.index !== false;
 		},
     tableData() {
       const clearValue = (value) => value.trim().replace(/^- /, "").replace(/^[\"\'](.*)[\"\']$/g, "$1");
       const isRowBreak = (value) => value === '- ';
+      const rowCount = this.hasHeaders ? 2 : 1;
 
       let array = typeof this.value === 'string'
         ? this.value.split('\n')
@@ -192,7 +206,7 @@ export default {
           .map(row => [...row])
         : this.value;
 
-      array ||= Array.from({ length: 2 }, () => Array(this.minColumns).fill(''));
+      array ||= Array.from({ length: rowCount }, () => Array(this.minColumns).fill(''));
 
       return array;
     },
@@ -264,6 +278,7 @@ export default {
         },
         "-",
         {
+          disabled: this.rows.length <= 1,
           icon: "trash",
           text: this.$t("delete"),
           click: "remove"
@@ -320,7 +335,9 @@ export default {
       this.moveColumn(event.oldIndex - 1, event.newIndex - 1);
     },
     onRowDrag(event) {
-      this.moveRow(event.oldIndex + 1, event.newIndex + 1);
+      const oldIndex = this.hasHeaders ? event.oldIndex + 1 : event.oldIndex;
+      const newIndex = this.hasHeaders ? event.newIndex + 1 : event.newIndex;
+      this.moveRow(oldIndex, newIndex);
     },
     addRow() {
       this.tableData.push(Array(this.columns.length).fill(''));
@@ -353,7 +370,8 @@ export default {
 				},
 				on: {
 					submit: () => {
-						this.tableData.splice(rowIndex + 1, 1);
+            const currentIndex = this.hasHeaders ? rowIndex + 1 : rowIndex;
+						this.tableData.splice(currentIndex, 1);
             this.updateTable();
 						this.$panel.dialog.close();
 					}
@@ -367,7 +385,8 @@ export default {
       this.updateTable();
     },
     insertRow(rowIndex, insert = "before") {
-      const insertIndex = insert === "before" ? rowIndex + 1 : rowIndex + 2;
+      const currentIndex = this.hasHeaders ? rowIndex + 1 : rowIndex;
+      const insertIndex = insert === "before" ? currentIndex : currentIndex + 1;
       this.tableData.splice(insertIndex, 0, Array(this.columns.length).fill(''));
       this.updateTable();
     },
@@ -377,7 +396,8 @@ export default {
       this.updateTable();
     },
     duplicateRow(rowIndex) {
-      this.tableData.splice(rowIndex + 1, 0, [...this.tableData[rowIndex + 1]]);
+      const currentIndex = this.hasHeaders ? rowIndex + 1 : rowIndex;
+      this.tableData.splice(currentIndex, 0, [...this.tableData[currentIndex]]);
       this.updateTable();
     },
     removeAll() {

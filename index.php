@@ -33,7 +33,10 @@ Kirby::plugin('bogdancondorachi/table-field', [
         }
 
         $rows[] = $newRow;
-        $headers = array_shift($rows) ?? [];
+
+        $blueprint = $field->parent()->blueprint()->field($field->key());
+        $hasHeaders = $blueprint['headers'] ?? true;
+        $headers = $hasHeaders ? array_shift($rows) : [];
   
         return ['headers' => $headers, 'rows' => $rows];
       } else {
