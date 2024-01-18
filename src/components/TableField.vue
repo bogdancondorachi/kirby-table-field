@@ -8,7 +8,7 @@
 				  icon="add"
 				  variant="filled"
 				  size="xs"
-				  @click="addColumn()"
+				  @click="add('column')"
 			  />
         <k-button
 					icon="dots"
@@ -18,7 +18,7 @@
 				/>
 				<k-dropdown-content
 					ref="options"
-					:options="options"
+					:options="tableOptions"
 					align-x="end"
 				/>
       </k-button-group>
@@ -33,7 +33,7 @@
             :options="dragOptions"
             :handle="true"
             element="tr"
-            @end="onColumnDrag"
+            @end="onDrag($event, 'column')"
           >
             <th v-if="hasIndexColumn" class="k-table-index-column">#</th>
 
@@ -49,7 +49,7 @@
                 <k-text-input
                   v-if="hasHeaders"
                   v-model="columns[columnIndex]"
-                  @input="updateTable()"
+                  @input="update()"
                   :placeholder="`${$t('field.table.column')} ${columnIndex + 1}`"
                   type="text"
                 />
@@ -72,7 +72,7 @@
           :options="dragOptions"
           :handle="true"
           element="tbody"
-          @end="onRowDrag"
+          @end="onDrag($event, 'row')"
         >
           <!-- Empty -->
 				  <tr v-if="rows.length === 0">
@@ -93,7 +93,7 @@
               <td v-for="(column, columnIndex) in row" :key="columnIndex" class="k-table-column k-table-cell">
                 <k-text-input
                   v-model="row[columnIndex]"
-                  @input="updateTable()"
+                  @input="update()"
                   type="text"
                 />
               </td>
@@ -118,7 +118,7 @@
         icon="add"
         size="xs"
         variant="filled"
-        @click="addRow()"
+        @click="add('row')"
       />
     </footer>
   </k-field>
@@ -162,17 +162,17 @@ export default {
   },
   computed: {
     values() {
-      return [...this.tableData];
+      return [...this.table];
     },
     columns() {
       return this.hasHeaders
-        ? this.tableData[0]
-        : this.tableData[0].length > 0
-          ? Array(this.tableData[0].length).fill('')
+        ? this.table[0]
+        : this.table[0].length > 0
+          ? Array(this.table[0].length).fill('')
           : Array(this.minColumns).fill('');
     },
     rows() {
-      return this.hasHeaders ? this.tableData.slice(1) : this.tableData;
+      return this.hasHeaders ? this.table.slice(1) : this.table;
     },
     colspan() {
 			let span = this.columns.length;
@@ -189,7 +189,7 @@ export default {
     hasIndexColumn() {
 			return this.sortable || this.index !== false;
 		},
-    tableData() {
+    table() {
       const clearValue = (value) => value.trim().replace(/^- /, "").replace(/^[\"\'](.*)[\"\']$/g, "$1");
       const isRowBreak = (value) => value === '- ';
       const rowCount = this.hasHeaders ? 2 : 1;
@@ -217,10 +217,10 @@ export default {
 				ghostClass: "k-table-row-ghost"
 			};
 		},
-    options() {
+    tableOptions() {
       return [
 				{
-					click: () => this.removeAll(),
+					click: () => this.remove('all'),
           disabled: this.rows.length === 0 && this.columns.length <= this.minColumns,
 					icon: 'trash',
 					text: this.$t('delete.all')
@@ -300,134 +300,132 @@ export default {
     columnOption(option, columnIndex) {
       switch (option) {
         case "insertBefore":
-          this.insertColumn(columnIndex, 'before')
+          this.insert('column', columnIndex, 'before')
           break;
         case "insertAfter":
-          this.insertColumn(columnIndex, 'after')
+          this.insert('column', columnIndex, 'after')
           break;
         case "clear":
-          this.clearColumn(columnIndex)
+          this.clear('column', columnIndex)
           break;
         case "duplicate":
-          this.duplicateColumn(columnIndex)
+          this.duplicate('column', columnIndex)
           break;
         case "remove":
-          this.removeColumn(columnIndex);
+          this.remove('column', columnIndex);
           break;
       }
     },
     rowOption(option, rowIndex) {
       switch (option) {
         case "insertBefore":
-          this.insertRow(rowIndex, 'before')
+          this.insert('row', rowIndex, 'before')
           break;
         case "insertAfter":
-          this.insertRow(rowIndex, 'after')
+          this.insert('row', rowIndex, 'after')
           break;
         case "clear":
-          this.clearRow(rowIndex)
+          this.clear('row', rowIndex)
           break;
         case "duplicate":
-          this.duplicateRow(rowIndex)
+          this.duplicate('row', rowIndex)
           break;
         case "remove":
-          this.removeRow(rowIndex);
+          this.remove('row', rowIndex);
           break;
       }
     },
-    moveArray(array, oldIndex, newIndex) {
-      array.splice(newIndex, 0, ...array.splice(oldIndex, 1));
-    },
-    moveColumn(oldIndex, newIndex) {
-      this.moveArray(this.columns, oldIndex, newIndex);
-      this.rows.forEach((column) => this.moveArray(column, oldIndex, newIndex));
-      this.updateTable();
-    },
-    moveRow(oldIndex, newIndex) {
-      this.moveArray(this.tableData, oldIndex, newIndex);
-      this.updateTable();
-    },
-    onColumnDrag(event) {
-      this.moveColumn(event.oldIndex - 1, event.newIndex - 1);
-    },
-    onRowDrag(event) {
-      const oldIndex = this.hasHeaders ? event.oldIndex + 1 : event.oldIndex;
-      const newIndex = this.hasHeaders ? event.newIndex + 1 : event.newIndex;
-      this.moveRow(oldIndex, newIndex);
-    },
-    addRow() {
-      this.tableData.push(Array(this.columns.length).fill(''));
-      this.updateTable();
-    },
-    addColumn() {
-      this.tableData.forEach((column) => column.push(""));
-      this.updateTable();
-    },
-    insertColumn(columnIndex, insert = "before") {
-      const insertIndex = insert === "before" ? columnIndex : columnIndex + 1;
-      this.columns.splice(insertIndex, 0, '');
-      this.rows.forEach((row) => row.splice(insertIndex, 0, ''));
-      this.updateTable();
-    },
-    insertRow(rowIndex, insert = "before") {
-      const currentIndex = this.hasHeaders ? rowIndex + 1 : rowIndex;
-      const insertIndex = insert === "before" ? currentIndex : currentIndex + 1;
-      this.tableData.splice(insertIndex, 0, Array(this.columns.length).fill(''));
-      this.updateTable();
-    },
-    clearColumn(columnIndex) {
-      this.tableData.forEach((row) => {row[columnIndex] = ''});
-      this.updateTable();
-    },
-    clearRow(rowIndex) {
-      const currentIndex = this.hasHeaders ? rowIndex + 1 : rowIndex;
-      this.tableData[currentIndex].fill('');
-      this.updateTable();
-    },
-    duplicateColumn(columnIndex) {
-      this.columns.splice(columnIndex + 1, 0, this.columns[columnIndex]);
-      this.rows.forEach((row) => row.splice(columnIndex + 1, 0, row[columnIndex]));
-      this.updateTable();
-    },
-    duplicateRow(rowIndex) {
-      const currentIndex = this.hasHeaders ? rowIndex + 1 : rowIndex;
-      this.tableData.splice(currentIndex, 0, [...this.tableData[currentIndex]]);
-      this.updateTable();
-    },
-    showDialog(text, callback) {
+    showDialog(message, callback) {
       this.$panel.dialog.open({
         component: "k-remove-dialog",
-        props: { text },
+        props: { text: message },
         on: {
           submit: () => {
             callback();
+            this.update();
             this.$panel.dialog.close();
           }
         }
       });
     },
-    removeColumn(columnIndex) {
-      this.showDialog(this.$t('field.table.delete.confirm.column'), () => {
-        this.tableData.forEach((column) => column.splice(columnIndex, 1));
-        this.updateTable();
-      });
+    add(type) {
+      if (type === 'column') {
+        this.table.forEach((column) => column.push(''));
+      } else if (type === 'row') {
+        this.table.push(Array(this.columns.length).fill(''));
+      }
+
+      this.update();
     },
-    removeRow(rowIndex) {
-      this.showDialog(this.$t('field.table.delete.confirm.row'), () => {
-        const currentIndex = this.hasHeaders ? rowIndex + 1 : rowIndex;
-        this.tableData.splice(currentIndex, 1);
-        this.updateTable();
-      });
+    insert(type, index, insertType = 'before') {
+      if (type === 'column') {
+        const insertIndex = insertType === 'before' ? index : index + 1;
+        this.columns.splice(insertIndex, 0, '');
+        this.rows.forEach((row) => row.splice(insertIndex, 0, ''));
+      } else if (type === 'row') {
+        const currentIndex = this.hasHeaders ? index + 1 : index;
+        const insertIndex = insertType === 'before' ? currentIndex : currentIndex + 1;
+        this.table.splice(insertIndex, 0, Array(this.columns.length).fill(''));
+      }
+
+      this.update();
     },
-    removeAll() {
-      this.showDialog(this.$t('field.table.delete.confirm.all'), () => {
-        this.columns.splice(0, this.columns.length, ...Array.from({ length: this.minColumns }, () => ''));
-        this.tableData.splice(0, this.tableData.length, ...[Array(this.minColumns).fill('')]);
-        this.updateTable();
-      });
+    clear(type, index) {
+      if (type === 'column') {
+        this.table.forEach((row) => {row[index] = ''});
+      } else if (type === 'row') {
+        const currentIndex = this.hasHeaders ? index + 1 : index;
+        this.table[currentIndex].fill('');
+      }
+
+      this.update();
     },
-    updateTable() {
-      this.$emit('input', this.tableData);
+    duplicate(type, index) {
+      if (type === 'column') {
+        this.columns.splice(index + 1, 0, this.columns[index]);
+        this.rows.forEach((row) => row.splice(index + 1, 0, row[index]));
+      } else if (type === 'row') {
+        const currentIndex = this.hasHeaders ? index + 1 : index;
+        this.table.splice(currentIndex, 0, [...this.table[currentIndex]]);
+      }
+
+      this.update();
+    },
+    remove(type, index) {
+      if (type === 'column') {
+        const message = this.$t('field.table.delete.confirm.column');
+        this.showDialog(message, () => {
+          this.table.forEach((column) => column.splice(index, 1));
+        });
+      } else if (type === 'row') {
+        const message = this.$t('field.table.delete.confirm.row');
+        this.showDialog(message, () => {
+          const currentIndex = this.hasHeaders ? index + 1 : index;
+          this.table.splice(currentIndex, 1);
+        });
+      } else if (type === 'all') {
+        const message = this.$t('field.table.delete.confirm.all');
+        this.showDialog(message, () => {
+          this.columns.splice(0, this.columns.length, ...Array.from({ length: this.minColumns }, () => ''));
+          this.table.splice(0, this.table.length, ...[Array(this.minColumns).fill('')]);
+        });
+      }
+    },
+    onDrag(event, type) {
+      const oldIndex = type === 'column' ? event.oldIndex - 1 : this.hasHeaders ? event.oldIndex + 1 : event.oldIndex;
+      const newIndex = type === 'column' ? event.newIndex - 1 : this.hasHeaders ? event.newIndex + 1 : event.newIndex;
+
+      if (type === 'column') {
+        this.columns.splice(newIndex, 0, ...this.columns.splice(oldIndex, 1));
+        this.rows.forEach((row) => row.splice(newIndex, 0, ...row.splice(oldIndex, 1)));
+      } else if (type === 'row') {
+        this.table.splice(newIndex, 0, ...this.table.splice(oldIndex, 1));
+      }
+
+      this.update();
+    },
+    update() {
+      this.$emit('input', this.table);
     }
   }
 };
