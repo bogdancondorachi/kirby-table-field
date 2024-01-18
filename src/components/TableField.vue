@@ -41,11 +41,11 @@
             <th
               v-for="(column, columnIndex) in columns"
               :key="columnIndex + '-header'"
-              :data-sortable="!disabled && sortable"
+              :data-sortable="isSortable"
               class="k-table-column k-table-header"
             >
               <k-bar>
-                <k-sort-handle v-if="!disabled && sortable" class="k-table-sort-handle" />
+                <k-sort-handle v-if="isSortable" class="k-table-sort-handle" />
                 <k-text-input
                   v-if="hasHeaders"
                   v-model="columns[columnIndex]"
@@ -84,9 +84,9 @@
           <template v-else>
             <tr v-for="(row, rowIndex) in rows" :key="rowIndex">
               <!-- Index & drag handle -->
-              <td v-if="hasIndexColumn" :data-sortable="!disabled && sortable && rows.length > 1" class="k-table-index-column">
+              <td v-if="hasIndexColumn" :data-sortable="isSortable && rows.length > 1" class="k-table-index-column">
 								<div class="k-table-index" v-text="index + rowIndex" />
-                <k-sort-handle v-if="!disabled && sortable && rows.length > 1" class="k-table-sort-handle" />
+                <k-sort-handle v-if="isSortable && rows.length > 1" class="k-table-sort-handle" />
               </td>
 
               <!-- Column -->
@@ -187,8 +187,21 @@ export default {
       return this.headers;
     },
     hasIndexColumn() {
-			return this.sortable || this.index !== false;
+			return this.isSortable || this.index !== false;
 		},
+    isSortable() {
+      if (this.disabled === true) {
+        return false;
+      }
+      if (this.index === false) {
+        return false;
+      }
+      if (this.sortable === false) {
+        return false;
+      }
+
+      return true;
+    },
     table() {
       const clearValue = (value) => value.trim().replace(/^- /, "").replace(/^[\"\'](.*)[\"\']$/g, "$1");
       const isRowBreak = (value) => value === '- ';

@@ -9,12 +9,14 @@
 
     thead {
       .k-table-header {
-        padding: 0 var(--spacing-2);
+        padding: 0 var(--spacing-3);
         .k-button {
           color: initial;
-          width: var(--button-width);
           padding: 0;
-          aspect-ratio: auto;
+          &.k-sort-button {
+            width: var(--button-width);
+            aspect-ratio: .4;
+          }
         }
         .k-bar {
           gap: var(--spacing-2);
@@ -27,7 +29,7 @@
         }
         .k-dropdown-content {
           margin-top: 8px;
-          margin-left: 6px;
+          margin-left: 11px;
           .k-button {
             font-family: var(--font-sans);
             font-size: var(--text-sm);
