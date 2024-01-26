@@ -5,8 +5,12 @@ use Kirby\Toolkit\Str;
 
 return [
   'toTable' => function (Field $field) {
-    if (!is_string($field->value())) {
-      return ['headers' => [], 'rows' => []];
+    $value = $field->value();
+    if (!is_string($value)) {
+      $value = is_array($value) ? $value : [];
+      $headers = !empty($value) ? array_shift($value) : [];
+      $rows = $value;
+      return ['headers' => $headers, 'rows' => $rows];
     } else {
       $items = Str::split($field, "\n");
       $newRow = [];
