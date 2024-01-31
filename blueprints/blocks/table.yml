@@ -1,0 +1,6 @@
+name: Table
+icon: table
+preview: table
+fields:
+  table:
+    type: table

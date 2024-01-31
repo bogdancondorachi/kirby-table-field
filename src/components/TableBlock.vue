@@ -1,0 +1,59 @@
+<template>
+	<div class="k-table">
+    <table>
+      <thead>
+        <tr>
+          <th v-for="(column, columnIndex) in columns" :key="columnIndex" class="k-table-column">
+            <k-text-input
+              v-model="columns[columnIndex]"
+              type="text"
+              :spellcheck="false"
+              :placeholder="`${$t('field.table.column')} ${columnIndex + 1}`"
+              @input="update()"
+            />
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr v-for="(row, rowIndex) in rows" :key="rowIndex">
+          <td v-for="(column, columnIndex) in row" :key="columnIndex" class="k-table-column">
+            <k-writer-input
+              v-model="row[columnIndex]"
+              :inline="true"
+              :nodes="false"
+              :spellcheck="false"
+              @input="update()"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<script>
+export default {
+	computed: {
+    table() {
+      return this.content.table ?? Array.from({ length: 2 }, () => Array(2).fill(''));
+    },
+		columns() {
+			return this.table[0];
+		},
+		rows() {
+			return this.table.slice(1);
+		},
+	}
+};
+</script>
+
+<style lang="scss">
+.k-block-type-table {
+  padding: var(--input-padding-multiline);
+
+  .k-table {
+	  border: 1px solid var(--color-gray-300);
+  }
+}
+</style>

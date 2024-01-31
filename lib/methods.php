@@ -5,37 +5,44 @@ use Kirby\Toolkit\Str;
 
 return [
   'toTable' => function (Field $field) {
-    if (!is_string($field->value())) {
-      return ['headers' => [], 'rows' => []];
-    } else {
+    $value = $field->value();
+
+    if (is_string($value)) {
       $items = Str::split($field, "\n");
-      $newRow = [];
+      $currentRow = [];
       $rows = [];
 
       foreach ($items as $item) {
         $item = trim($item);
 
         if ($item === '-') {
-          if (!empty($newRow)) {
-            $rows[] = $newRow;
-            $newRow = [];
+          if (!empty($currentRow)) {
+            $rows[] = $currentRow;
+            $currentRow = [];
           }
         } else {
           $item = trim($item, '- ');
           $item = trim($item, '"\'');
-          $newRow[] = $item;
+          $currentRow[] = $item;
         }
       }
 
-      if (!empty($newRow)) {
-        $rows[] = $newRow;
+      if (!empty($currentRow)) {
+        $rows[] = $currentRow;
       }
 
       $blueprint = $field->parent()->blueprint()->field($field->key());
       $hasHeaders = $blueprint['headers'] ?? true;
       $headers = $hasHeaders ? array_shift($rows) : [];
 
-      return ['headers' => $headers, 'rows' => $rows];
+    } else {
+
+      $value = is_array($value) ? $value : [];
+      $headers = !empty($value) ? array_shift($value) : [];
+      $rows = !empty($value) ? $value : [];
+
     }
+    
+    return ['headers' => $headers, 'rows' => $rows];
   }
 ];
