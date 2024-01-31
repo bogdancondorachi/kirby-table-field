@@ -49,9 +49,10 @@
                 <k-text-input
                   v-if="hasHeaders"
                   v-model="columns[columnIndex]"
-                  @input="update()"
-                  :placeholder="`${$t('field.table.column')} ${columnIndex + 1}`"
                   type="text"
+                  :spellcheck="false"
+                  :placeholder="`${$t('field.table.column')} ${columnIndex + 1}`"
+                  @input="update()"
                 />
                 <k-text v-else>{{ $t('field.table.column') }} {{ columnIndex + 1 }}</k-text>
                 <!-- Options -->
@@ -91,10 +92,12 @@
 
               <!-- Column -->
               <td v-for="(column, columnIndex) in row" :key="columnIndex" class="k-table-column k-table-cell">
-                <k-text-input
+                <k-writer-input
                   v-model="row[columnIndex]"
+                  :inline="true"
+                  :nodes="false"
+                  :spellcheck="false"
                   @input="update()"
-                  type="text"
                 />
               </td>
 
