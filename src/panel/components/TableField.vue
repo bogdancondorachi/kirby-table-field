@@ -230,17 +230,7 @@ export default {
 			return this.isSortable || this.index !== false;
 		},
     isSortable() {
-      if (this.disabled === true) {
-        return false;
-      }
-      if (this.index === false) {
-        return false;
-      }
-      if (this.sortable === false) {
-        return false;
-      }
-
-      return true;
+      return !this.disabled && this.index !== false && this.sortable;
     },
     table() {
       const clearValue = value => value.trim().replace(/^- /, '').replace(/^[\"\'](.*)[\"\']$/g, '$1');
