@@ -37,21 +37,23 @@ fields:
 ### Field Properties:
 | Name       | Type          | Default | Description                                                      |
 |:-----------|:--------------|:--------|:-----------------------------------------------------------------|
+| align      | `string`      | `-`     | Set the text alignment of the table
 | disabled   | `bool`        | `-`     | If `true`, the field is no longer editable and will not be saved |
 | duplicate  | `bool`        | `true`  | Toggles duplicating columns and rows in the table                |
 | empty      | `string`      | `-`     | The placeholder text if no rows exists                           |
 | help       | `string`      | `-`     | Optional help text below the field                               |
 | index      | `int`, `bool` | `1`     | Specifies the starting index. If set to `false`, it removes the index column; in this case, `sortable` would be disabled as well                                                |
-| label      | `string`      | `-`     | Sets the label above the field                                   |
-| maxColumns | `int`         | `5`     | Sets the maximum allowed columns in the table                    |
-| minColumns | `int`         | `2`     | Sets the minimum required columns in the table                   |
+| label      | `string`      | `-`     | Set the label above the field                                   |
+| maxColumns | `int`         | `5`     | Set the maximum allowed columns in the table                    |
+| minColumns | `int`         | `2`     | Set the minimum required columns in the table                   |
 | sortable   | `bool`        | `true`  | Toggles drag & drop sorting                                      |
 | translate  | `bool`        | `true`  | If `false`, the field will be disabled in non-default languages and cannot be translated. This is only relevant in multi-language setups.                                                                        |
 
 ### Use the field in your template:
 ```php
-<?php $table = $page->table()->toTable(); ?>
-<?php if($table != null): ?>
+<?php 
+$table = $page->table()->toTable();
+if (!empty($table['headers']) && !empty($table['rows'])): ?>
   <table>
     <thead>
       <tr>
@@ -96,8 +98,9 @@ To overwrite this default blueprint, place your custom file in `/site/blueprints
 
 ### Snippet:
 ```php
-<?php $table = $block->table()->toTable(); ?>
-<?php if($table != null): ?>
+<?php 
+$table = $block->table()->toTable();
+if (!empty($table['headers']) && !empty($table['rows'])): ?>
   <table>
     <thead>
       <tr>
