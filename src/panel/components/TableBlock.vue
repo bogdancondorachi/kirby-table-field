@@ -3,7 +3,12 @@
     <table>
       <thead>
         <tr>
-          <th v-for="(column, columnIndex) in columns" :key="columnIndex" class="k-table-column">
+          <th
+            v-for="(column, columnIndex) in columns"
+            :key="columnIndex + 'header'"
+            data-mobile="true"
+            class="k-table-column"
+          >
             <k-text-input
               v-model="columns[columnIndex]"
               type="text"
@@ -17,7 +22,12 @@
 
       <tbody>
         <tr v-for="(row, rowIndex) in rows" :key="rowIndex">
-          <td v-for="(column, columnIndex) in row" :key="columnIndex" class="k-table-column">
+          <td
+            v-for="(column, columnIndex) in row"
+            :key="rowIndex + '-' + columnIndex"
+            data-mobile="true"
+            class="k-table-column"
+          >
             <k-writer-input
               v-model="row[columnIndex]"
               :inline="true"
@@ -47,13 +57,3 @@ export default {
 	}
 };
 </script>
-
-<style lang="scss">
-.k-block-type-table {
-  padding: var(--input-padding-multiline);
-
-  .k-table {
-	  border: 1px solid var(--color-gray-300);
-  }
-}
-</style>

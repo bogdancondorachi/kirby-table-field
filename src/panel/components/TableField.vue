@@ -35,17 +35,25 @@
             element="tr"
             @end="onDrag($event, 'column')"
           >
-            <th v-if="hasIndexColumn" class="k-table-index-column">#</th>
+            <th
+              v-if="hasIndexColumn"
+              data-mobile="true"
+              class="k-table-index-column"
+            >
+              #
+            </th>
 
             <!-- Header Column -->
             <th
               v-for="(column, columnIndex) in columns"
               :key="columnIndex + '-header'"
               :data-sortable="isSortable"
+              data-mobile="true"
               class="k-table-column k-table-header"
             >
               <k-bar>
                 <k-sort-handle v-if="isSortable" class="k-table-sort-handle" />
+
                 <k-text-input
                   v-if="hasHeaders"
                   v-model="columns[columnIndex]"
@@ -55,15 +63,20 @@
                   @input="update()"
                 />
                 <k-text v-else>{{ $t('field.table.column') }} {{ columnIndex + 1 }}</k-text>
-                <!-- Options -->
-                <k-options-dropdown v-if="!disabled"
+
+                <k-options-dropdown
+                  v-if="!disabled"
                   :options="columnOptions"
                   @option="columnOption($event, columnIndex)"
 								/>
               </k-bar>
             </th>
 
-            <th v-if="!disabled && rows.length !== 0" class="k-table-options-column"></th>
+            <th
+              v-if="!disabled && rows.length !== 0"
+              data-mobile="true"
+              class="k-table-options-column"
+            ></th>
           </k-draggable>
         </thead>
 
@@ -85,13 +98,27 @@
           <template v-else>
             <tr v-for="(row, rowIndex) in rows" :key="rowIndex">
               <!-- Index & drag handle -->
-              <td v-if="hasIndexColumn" :data-sortable="isSortable && rows.length > 1" class="k-table-index-column">
+              <td
+                v-if="hasIndexColumn"
+                :data-sortable="isSortable && rows.length > 1"
+                data-mobile="true"
+                class="k-table-index-column"
+              >
 								<div class="k-table-index" v-text="index + rowIndex" />
-                <k-sort-handle v-if="isSortable && rows.length > 1" class="k-table-sort-handle" />
+
+                <k-sort-handle
+                  v-if="isSortable && rows.length > 1"
+                  class="k-table-sort-handle"
+                />
               </td>
 
               <!-- Column -->
-              <td v-for="(column, columnIndex) in row" :key="columnIndex" class="k-table-column k-table-cell">
+              <td
+                v-for="(column, columnIndex) in row"
+                :key="rowIndex + '-' + columnIndex"
+                data-mobile="true"
+                class="k-table-column k-table-cell"
+              >
                 <k-writer-input
                   v-model="row[columnIndex]"
                   :inline="true"
@@ -102,7 +129,11 @@
               </td>
 
               <!-- Options -->
-              <td v-if="!disabled" class="k-table-options-column">
+              <td
+                v-if="!disabled"
+                data-mobile="true"
+                class="k-table-options-column"
+              >
                 <k-options-dropdown
                   :options="rowOptions"
                   @option="rowOption($event, rowIndex)"

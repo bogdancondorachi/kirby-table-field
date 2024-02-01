@@ -1,8 +1,6 @@
 .k-table-field,
 .k-block-type-table {
   .k-table {
-    position: relative;
-
     .k-table-column {
       padding: 0;
       overflow: initial;
@@ -72,5 +70,13 @@
 	    justify-content: center;
       margin-top: var(--spacing-3);
     }
+  }
+}
+
+.k-block-type-table {
+  padding: var(--input-padding-multiline);
+
+  .k-table {
+	  border: 1px solid var(--color-gray-300);
   }
 }
