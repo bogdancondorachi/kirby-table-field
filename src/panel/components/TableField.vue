@@ -74,7 +74,7 @@
             </th>
 
             <th
-              v-if="!disabled && rows.length !== 0"
+              v-if="hasOptions"
               data-mobile="true"
               class="k-table-options-column"
             ></th>
@@ -132,7 +132,7 @@
 
               <!-- Options -->
               <td
-                v-if="!disabled"
+                v-if="hasOptions"
                 data-mobile="true"
                 class="k-table-options-column"
               >
@@ -225,6 +225,9 @@ export default {
     },
     hasAlignment() {
       return this.align;
+    },
+    hasOptions() {
+      return !this.disabled && this.rows.length !== 0;
     },
     hasIndexColumn() {
 			return this.isSortable || this.index !== false;
