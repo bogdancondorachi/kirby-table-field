@@ -6,6 +6,7 @@
           <th
             v-for="(column, columnIndex) in columns"
             :key="columnIndex + 'header'"
+            :data-align="hasAlignment"
             data-mobile="true"
             class="k-table-column"
           >
@@ -25,6 +26,7 @@
           <td
             v-for="(column, columnIndex) in row"
             :key="rowIndex + '-' + columnIndex"
+            :data-align="hasAlignment"
             data-mobile="true"
             class="k-table-column"
           >
@@ -54,6 +56,12 @@ export default {
 		rows() {
 			return this.table.slice(1);
 		},
+    tableField() {
+      return this.field('table')
+    },
+    hasAlignment() {
+      return this.tableField.align;
+    },
 	}
 };
 </script>

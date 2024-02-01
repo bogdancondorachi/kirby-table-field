@@ -48,6 +48,7 @@
               v-for="(column, columnIndex) in columns"
               :key="columnIndex + '-header'"
               :data-sortable="isSortable"
+              :data-align="hasAlignment"
               data-mobile="true"
               class="k-table-column k-table-header"
             >
@@ -116,6 +117,7 @@
               <td
                 v-for="(column, columnIndex) in row"
                 :key="rowIndex + '-' + columnIndex"
+                :data-align="hasAlignment"
                 data-mobile="true"
                 class="k-table-column k-table-cell"
               >
@@ -168,6 +170,7 @@ export default {
     required: Boolean,
     type: String,
 
+    align: String,
     duplicate: {
       type: Boolean,
       default: true
@@ -219,6 +222,9 @@ export default {
 		},
     hasHeaders() {
       return this.headers;
+    },
+    hasAlignment() {
+      return this.align;
     },
     hasIndexColumn() {
 			return this.isSortable || this.index !== false;
