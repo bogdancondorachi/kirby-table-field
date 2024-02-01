@@ -1,30 +1,27 @@
 .k-table-field,
 .k-block-type-table {
   .k-table {
-    .k-table-column {
-      padding: 0;
-      overflow: initial;
-    }
-
     thead {
-      .k-table-header {
+      .k-table-column {
         padding: 0 var(--spacing-3);
-        .k-button {
-          color: initial;
-          padding: 0;
-          &.k-sort-button {
-            width: var(--button-width);
-            aspect-ratio: .4;
-          }
-        }
-        .k-bar {
-          gap: var(--spacing-2);
-        }
         .k-text {
           width: 100%;
         }
         .k-text-input {
           padding: var(--spacing-2) 0;
+        }
+      }
+      .k-table-header {
+        .k-bar {
+          gap: var(--spacing-2);
+        }
+        .k-button {
+          width: var(--button-width);
+          color: initial;
+          padding: 0;
+          &.k-sort-button {
+            aspect-ratio: 1/2;
+          }
         }
         .k-dropdown-content {
           margin-top: 8px;
@@ -34,7 +31,6 @@
             font-size: var(--text-sm);
             color: var(--button-color-text);
             height: var(--button-height);
-            border-radius: var(--button-rounded);
             padding-inline: var(--button-padding);
           }
         }
@@ -48,18 +44,21 @@
     }
 
     tbody {
-      tr:first-child td {
-        border-block-start: 1px solid var(--table-color-border);
-      }
       tr:has(.k-options-dropdown > dialog) {
         outline: var(--outline);
+        outline-offset: -1px;
         border-radius: var(--input-rounded);
       }
-      .k-table-cell .k-writer .ProseMirror {
-        padding: var(--spacing-2) var(--spacing-3);
+      .k-table-column {
+        overflow: initial;
+        .k-writer .ProseMirror {
+          padding: var(--spacing-2) var(--spacing-3);
+        }
+      }
+      .k-table-cell {
         &:where(:focus,:focus-visible,:focus-within) {
-          outline-offset: -1px;
           outline: var(--outline);
+          outline-offset: -1px;
           border-radius: var(--input-rounded);
         }
       }
@@ -75,8 +74,10 @@
 
 .k-block-type-table {
   padding: var(--input-padding-multiline);
-
   .k-table {
-	  border: 1px solid var(--color-gray-300);
+	  border: 1px solid var(--table-color-border);
+    .k-table-column {
+      padding: 0;
+    }
   }
 }
