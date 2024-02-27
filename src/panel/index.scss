@@ -1,7 +1,47 @@
 .k-table-field,
 .k-block-type-table {
   .k-table {
+    overflow: auto;
+    table {
+      table-layout: auto;
+    }
+    th, td {
+      border-inline-start: 1px solid var(--table-color-border);
+      border-inline-end: none;
+      &:first-child {
+        border-inline-start: none;
+      }
+    }
+    .k-table-index-column + th,
+    .k-table-index-column + td {
+      border-inline-start: none;
+    }
+    th:not(.k-table-index-column, .k-table-options-column),
+    td:not(.k-table-index-column, .k-table-options-column) {
+      width: auto;
+      min-width: 21.37vh; //12.57vw
+    }
+    .k-table-index-column,
+    .k-table-options-column {
+      position: sticky;
+      width: var(--table-row-height);
+      z-index: 2;
+    }
+    .k-table-index-column {
+      left: 0;
+      border-inline-end: 1px solid var(--table-color-border);
+    }
+    .k-table-options-column {
+      right: 0;
+    }
     thead {
+      th {
+        top: 0;
+        inset-inline: auto;
+      }
+      th.k-table-row-ghost {
+        outline-offset: -2px;
+      }
       .k-table-column {
         padding: 0 var(--spacing-3);
         .k-text {
@@ -38,17 +78,29 @@
         &:has(.k-options-dropdown > dialog),
         &:has(.k-text-input:focus) {
           outline: var(--outline);
-          outline-offset: -1px;
+          outline-offset: -2px;
           border-radius: var(--input-rounded);
         }
       }
     }
 
     tbody {
+      tr:hover td {
+        background: var(--table-color-hover) !important;
+      }
+      tr.k-table-row-ghost {
+        position: relative;
+        border-radius: 0;
+        z-index: 3;
+      }
       tr:has(.k-options-dropdown > dialog) {
+        position: relative;
         outline: var(--outline);
-        outline-offset: -1px;
-        border-radius: var(--input-rounded);
+        z-index: 3;
+      }
+      .k-table-index-column {
+        background: var(--table-color-back);
+        padding-inline: 0;
       }
       .k-table-column {
         overflow: initial;
@@ -59,9 +111,12 @@
       .k-table-cell {
         &:where(:focus,:focus-visible,:focus-within) {
           outline: var(--outline);
-          outline-offset: -1px;
+          outline-offset: -2px;
           border-radius: var(--input-rounded);
         }
+      }
+      .k-table-options-column {
+        background: var(--table-color-back);
       }
     }
     
