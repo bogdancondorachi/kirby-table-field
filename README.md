@@ -42,10 +42,10 @@ fields:
 | duplicate  | `bool`        | `true`  | Toggles duplicating columns and rows in the table                |
 | empty      | `string`      | `-`     | The placeholder text if no rows exists                           |
 | help       | `string`      | `-`     | Optional help text below the field                               |
-| index      | `int`, `bool` | `1`     | Specifies the starting index. If set to `false`, it removes the index column; in this case, `sortable` would be disabled as well                                                |
-| label      | `string`      | `-`     | Set the label above the field                                   |
-| maxColumns | `int`         | `5`     | Set the maximum allowed columns in the table                    |
-| minColumns | `int`         | `2`     | Set the minimum required columns in the table                   |
+| index      | `int`, `bool` | `1`     | Specifies the starting index. If set to `false`, it removes the index column; in this case, `sortable` would be disabled as well                                                                                 |
+| label      | `string`      | `-`     | Set the label above the field                                    |
+| maxColumns | `int`         | `8`     | Set the maximum allowed columns in the table                     |
+| minColumns | `int`         | `2`     | Set the minimum required columns in the table                    |
 | sortable   | `bool`        | `true`  | Toggles drag & drop sorting                                      |
 | translate  | `bool`        | `true`  | If `false`, the field will be disabled in non-default languages and cannot be translated. This is only relevant in multi-language setups.                                                                        |
 
