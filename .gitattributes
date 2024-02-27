@@ -1,6 +1,6 @@
 # Git
-.gitattributes export-ignore
 .github/ export-ignore
+.gitattributes export-ignore
 .gitignore export-ignore
 
 # Source files
@@ -9,5 +9,5 @@ src/panel/ export-ignore
 # Development files
 .editorconfig export-ignore
 composer.lock export-ignore
-package-lock.json export-ignore
 package.json export-ignore
+pnpm-lock.yaml export-ignore
