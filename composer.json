@@ -4,7 +4,7 @@
   "type": "kirby-plugin",
   "license": "MIT",
   "homepage": "https://getkirby.com/plugins/bogdancondorachi/table-field",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "authors": [
     {
       "name": "Bogdan Condorachi",
