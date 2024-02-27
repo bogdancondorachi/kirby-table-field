@@ -162,19 +162,14 @@
 
 <script>
 export default {
+  extends: 'k-field',
   props: {
-    disabled: Boolean,
-    empty: String,
-    help: String,
-    label: String,
-    required: Boolean,
-    type: String,
-
     align: String,
     duplicate: {
       type: Boolean,
       default: true
     },
+    empty: String,
     headers: {
       type: Boolean,
       default: true
@@ -189,7 +184,7 @@ export default {
     },
     maxColumns: {
       type: Number,
-      default: 5
+      default: 8
     },
     sortable: {
       type: Boolean,

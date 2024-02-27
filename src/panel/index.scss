@@ -24,7 +24,7 @@
     .k-table-index-column,
     .k-table-options-column {
       position: sticky;
-      width: var(--table-row-height);
+      min-width: var(--table-row-height);
       z-index: 2;
     }
     .k-table-index-column {
