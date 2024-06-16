@@ -129,6 +129,7 @@
                   :disabled="disabled"
                   :inline="true"
                   :nodes="false"
+                  :marks="marks"
                   :spellcheck="false"
                   @input="update()"
                 />
@@ -189,6 +190,10 @@ export default {
     maxColumns: {
       type: Number,
       default: 8
+    },
+    marks: {
+      type: [Boolean, Array],
+      default: true
     },
     sortable: {
       type: Boolean,

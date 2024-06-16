@@ -34,6 +34,7 @@
               v-model="row[columnIndex]"
               :inline="true"
               :nodes="false"
+              :marks="tableField.marks"
               :spellcheck="false"
               @input="update()"
             />
