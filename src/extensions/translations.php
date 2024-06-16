@@ -13,7 +13,7 @@ return [
   'de' => [
     'field.table.column' => 'Spalte',
     'field.table.row' => 'Zeile',
-    'field.table.clear' => 'Inhalt übersichtlich',
+    'field.table.clear' => 'Inhalt leeren',
     'field.table.empty.rows' => 'Noch keine Zeilen',
     'field.table.delete.confirm.column' => 'Möchtest du diese Spalte wirklich löschen?',
     'field.table.delete.confirm.row' => 'Möchtest du diese Zeile wirklich löschen?',
