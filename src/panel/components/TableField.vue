@@ -125,6 +125,7 @@
                   v-model="row[columnIndex]"
                   :inline="true"
                   :nodes="false"
+                  :marks="marks"
                   :spellcheck="false"
                   @input="update()"
                 />
@@ -186,6 +187,10 @@ export default {
       type: Number,
       default: 8
     },
+		marks: {
+			type: [Boolean, Array],
+			default: true
+		},
     sortable: {
       type: Boolean,
       default: true
