@@ -104,8 +104,20 @@
       }
       .k-table-column {
         overflow: initial;
+        .k-toolbar {
+          top: -34px !important;
+          left: initial !important;
+          right: 0;
+        }
         .k-writer .ProseMirror {
           padding: var(--spacing-2) var(--spacing-3);
+        }
+        &:nth-child(1),
+        &:nth-child(2) {
+          .k-toolbar {
+            left: 0 !important;
+            right: initial;
+          }
         }
       }
       .k-table-cell {
