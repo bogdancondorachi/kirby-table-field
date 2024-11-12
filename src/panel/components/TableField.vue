@@ -47,10 +47,9 @@
             <th
               v-for="(column, columnIndex) in columns"
               :key="columnIndex + '-header'"
-              :data-sortable="isSortable"
               :data-align="hasAlignment"
               data-mobile="true"
-              class="k-table-column k-table-header"
+              :class="['k-table-column', 'k-table-header', { 'k-table-sortable-row': isSortable }]"
             >
               <k-bar>
                 <k-sort-handle v-if="isSortable" class="k-table-sort-handle" />
@@ -97,7 +96,11 @@
 				  </tr>
 
           <template v-else>
-            <tr v-for="(row, rowIndex) in rows" :key="rowIndex">
+            <tr
+              v-for="(row, rowIndex) in rows"
+              :key="rowIndex"
+              :class="['k-table-row', { 'k-table-sortable-row': isSortable && rows.length > 1 }]"
+            >
               <!-- Index & drag handle -->
               <td
                 v-if="hasIndexColumn"
@@ -249,8 +252,9 @@ export default {
     dragOptions() {
 			return {
         disabled: !this.sortable,
-				fallbackClass: 'k-table-row-fallback',
-				ghostClass: 'k-table-row-ghost'
+        draggable: ".k-table-sortable-row",
+        fallbackClass: 'k-table-row-fallback',
+        ghostClass: 'k-table-row-ghost'
 			};
 		},
     tableOptions() {
