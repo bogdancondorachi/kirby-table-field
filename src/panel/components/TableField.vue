@@ -57,7 +57,7 @@
                 <k-text-input
                   v-if="hasHeaders"
                   v-model="columns[columnIndex]"
-                  type="text"
+                  :disabled="disabled"
                   :spellcheck="false"
                   :placeholder="`${$t('field.table.column')} ${columnIndex + 1}`"
                   @input="update()"
@@ -126,6 +126,7 @@
               >
                 <k-writer-input
                   v-model="row[columnIndex]"
+                  :disabled="disabled"
                   :inline="true"
                   :nodes="false"
                   :spellcheck="false"
