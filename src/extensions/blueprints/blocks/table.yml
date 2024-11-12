@@ -1,6 +1,6 @@
 name: Table
 icon: table
-preview: table
+preview: dataTable
 fields:
   table:
     type: table

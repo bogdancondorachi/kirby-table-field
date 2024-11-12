@@ -7,7 +7,7 @@ panel.plugin('bogdancondorachi/table-field', {
     table: TableField
   },
   blocks: {
-    table: TableBlock
+    dataTable: TableBlock
   },
 
   icons: {
