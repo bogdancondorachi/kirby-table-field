@@ -4,3 +4,7 @@ preview: dataTable
 fields:
   table:
     type: table
+  caption:
+    type: writer
+    icon: text
+    inline: true

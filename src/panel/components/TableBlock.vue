@@ -1,5 +1,12 @@
 <template>
-	<div class="k-table">
+  <k-block-figure
+    :caption="content.caption"
+    :caption-marks="captionMarks"
+    :disabled="disabled"
+    @open="open"
+    @update="update"
+  >
+  <div class="k-table">
     <table>
       <thead>
         <tr>
@@ -15,7 +22,7 @@
               type="text"
               :spellcheck="false"
               :placeholder="`${$t('field.table.column')} ${columnIndex + 1}`"
-              @input="update()"
+              @input="update"
             />
           </th>
         </tr>
@@ -43,26 +50,30 @@
       </tbody>
     </table>
   </div>
+  </k-block-figure>
 </template>
 
 <script>
 export default {
-	computed: {
+  computed: {
+    captionMarks() {
+      return this.field("caption", { marks: true }).marks;
+		},
     table() {
       return this.content.table ?? Array.from({ length: 2 }, () => Array(2).fill(''));
     },
-		columns() {
-			return this.table[0];
-		},
-		rows() {
-			return this.table.slice(1);
-		},
+    columns() {
+      return this.table[0];
+    },
+    rows() {
+      return this.table.slice(1);
+    },
     tableField() {
       return this.field('table')
     },
     hasAlignment() {
       return this.tableField.align;
     },
-	}
+  }
 };
 </script>
