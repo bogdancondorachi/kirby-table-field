@@ -3,7 +3,7 @@
   "description": "Table field plugin for Kirby CMS",
   "type": "kirby-plugin",
   "license": "MIT",
-  "version": "2.3.2",
+  "version": "2.4.0",
   "homepage": "https://getkirby.com/plugins/bogdancondorachi/table-field",
   "authors": [
     {
