@@ -3,9 +3,6 @@
 # Kirby Table Field
 The table field makes possible to effortlessly create and manage tables within the panel. You can easily tailor tables to their specific needs, enhancing the efficiency and management of data presentation.
 
-> [!WARNING]
-> **The plugin requires Kirby 4**. For Kirby 3, you can use [v2.1.0](https://github.com/bogdancondorachi/kirby-table-field/releases/tag/v2.1.0) (although without further support)
-
 ## Installation
 
 ### Composer
@@ -35,19 +32,23 @@ fields:
 ```
 
 ### Field Properties:
-| Name       | Type          | Default | Description                                                      |
-|:-----------|:--------------|:--------|:-----------------------------------------------------------------|
-| align      | `string`      | `-`     | Set the text alignment of the table
-| disabled   | `bool`        | `-`     | If `true`, the field is no longer editable and will not be saved |
-| duplicate  | `bool`        | `true`  | Toggles duplicating columns and rows in the table                |
-| empty      | `string`      | `-`     | The placeholder text if no rows exists                           |
-| help       | `string`      | `-`     | Optional help text below the field                               |
-| index      | `int`, `bool` | `1`     | Specifies the starting index. If set to `false`, it removes the index column; in this case, `sortable` would be disabled as well                                                                                 |
-| label      | `string`      | `-`     | Set the label above the field                                    |
-| maxColumns | `int`         | `8`     | Set the maximum allowed columns in the table                     |
-| minColumns | `int`         | `2`     | Set the minimum required columns in the table                    |
-| sortable   | `bool`        | `true`  | Toggles drag & drop sorting                                      |
-| translate  | `bool`        | `true`  | If `false`, the field will be disabled in non-default languages and cannot be translated. This is only relevant in multi-language setups.                                                                        |
+| Name       | Type            | Default | Description                                                          |
+|:-----------|:----------------|:--------|:---------------------------------------------------------------------|
+| align      | `string`        | `-`     | Set the text alignment of the table                                  |
+| disabled   | `bool`          | `-`     | If `true`, the field is no longer editable and will not be saved     |
+| duplicate  | `bool`          | `true`  | Toggles duplicating columns and rows in the table                    |
+| empty      | `string`        | `-`     | The placeholder text if no rows exists                               |
+| help       | `string`        | `-`     | Optional help text below the field                                   |
+| index      | `int`, `bool`   | `1`     | Specifies the starting index. If set to `false`, it removes the index 
+column; in this case, `sortable` would be disabled as well                                                      |
+| label      | `string`        | `-`     | Set the label above the field                                        |
+| marks      | `bool`, `array` | `true`  | Set the allowed HTML formats. Activate/deactivate them all by passing 
+`true`/`false`                                                                                                  |
+| maxColumns | `int`           | `8`     | Set the maximum allowed columns in the table                         |
+| minColumns | `int`           | `2`     | Set the minimum required columns in the table                        |
+| sortable   | `bool`          | `true`  | Toggles drag & drop sorting                                          |
+| translate  | `bool`          | `true`  | If `false`, the field will be disabled in non-default languages and 
+cannot be translated. This is only relevant in multi-language setups.                                           |
 
 ### Use the field in your template:
 ```php
@@ -89,12 +90,16 @@ fields:
 ```yaml
 name: Table
 icon: table
-preview: table
+preview: dataTable
 fields:
   table:
     type: table
+  caption:
+    type: writer
+    icon: text
+    inline: true
 ```
-To overwrite this default blueprint, place your custom file in `/site/blueprints/blocks/table.yml`
+To overwrite the default blueprint, place your custom file in `/site/blueprints/blocks/table.yml`
 
 ### Snippet:
 ```php
