@@ -240,18 +240,64 @@ export default {
       return !this.disabled && this.index !== false && this.sortable;
     },
     table() {
-      const clearValue = value => value.trim().replace(/^- /, '').replace(/^[\"\'](.*)[\"\']$/g, '$1');
-      const isRowBreak = value => value === '- ';
-      const rowCount = this.hasHeaders ? 2 : 1;
+      const clearValue = (value) => value.trim().replace(/^[>\|-]?\s*["']?(.*?)["']?$/, '$1') || '';
+      const isRowBreak = (value) => /^\s*-\s*$/.test(value);
+      const isMultiline = (value) => /^\s*-\s*[>|]\s*$/.test(value);
 
-      let rows = typeof this.value === 'string'
-        ? this.value.split('\n').reduce((row, value) => {
-            isRowBreak(value) ? row.push([]) : row[row.length - 1].push(clearValue(value));
-            return row;
-          }, [])
-        : this.value;
+      const parseRows = (value) => {
+        const rows = [];
+        let currentRow = [];
+        let currentCell = '';
+        let inMultilineCell = false;
 
-      rows ||= Array.from({ length: rowCount }, () => Array(this.minColumns).fill(''));
+        value.split('\n').forEach((line) => {
+          if (isRowBreak(line)) {
+            if (inMultilineCell) {
+              currentRow.push(clearValue(currentCell));
+              currentCell = '';
+              inMultilineCell = false;
+            }
+            if (currentRow.length > 0) {
+              rows.push(currentRow);
+              currentRow = [];
+            }
+          } else if (isMultiline(line)) {
+            if (inMultilineCell) {
+              currentRow.push(clearValue(currentCell));
+              currentCell = '';
+            }
+            inMultilineCell = true;
+          } else if (inMultilineCell) {
+            if (line.trim().startsWith('-') && !line.trim().startsWith('- >')) {
+              inMultilineCell = false;
+              currentRow.push(clearValue(currentCell));
+              currentCell = '';
+              if (!isRowBreak(line)) {
+                currentRow.push(clearValue(line));
+              }
+            } else {
+              currentCell += (currentCell ? '\n' : '') + line.trim();
+            }
+          } else {
+            currentRow.push(clearValue(line));
+          }
+        });
+
+        if (inMultilineCell && currentCell.trim()) {
+          currentRow.push(clearValue(currentCell));
+        }
+
+        if (currentRow.length > 0) rows.push(currentRow);
+
+        return rows;
+      };
+
+      let rows = typeof this.value === 'string' ? parseRows(this.value) : this.value;
+
+      rows ||= Array.from({ length: this.hasHeaders ? 2 : 1 }, () => Array(this.minColumns).fill(''));
+      rows.forEach(row => {
+        while (row.length < this.minColumns) row.push('');
+      });
 
       return rows;
     },
