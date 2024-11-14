@@ -3,8 +3,8 @@
   "description": "Table field plugin for Kirby CMS",
   "type": "kirby-plugin",
   "license": "MIT",
-  "homepage": "https://getkirby.com/plugins/bogdancondorachi/table-field",
   "version": "2.3.2",
+  "homepage": "https://getkirby.com/plugins/bogdancondorachi/table-field",
   "authors": [
     {
       "name": "Bogdan Condorachi",
@@ -13,18 +13,17 @@
     }
   ],
   "require": {
-    "getkirby/composer-installer": "^1.2"
-  },
-  "scripts": {
-    "dist": "composer install --no-dev --optimize-autoloader"
-  },
+		"php": ">=8.1.0 <8.4.0",
+		"getkirby/cms": "^4.0",
+		"getkirby/composer-installer": "^1.2"
+	},
   "config": {
-    "optimize-autoloader": true,
     "allow-plugins": {
       "getkirby/composer-installer": true
     }
   },
   "extra": {
-    "installer-name": "table-field"
+    "installer-name": "table-field",
+    "kirby-cms-path": false
   }
 }

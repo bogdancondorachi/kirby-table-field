@@ -10,4 +10,3 @@ src/panel/ export-ignore
 .editorconfig export-ignore
 composer.lock export-ignore
 package.json export-ignore
-pnpm-lock.yaml export-ignore

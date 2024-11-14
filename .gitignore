@@ -4,7 +4,9 @@
 # Development files
 /node_modules
 /vendor
+/tests
 
 # Temporary files
 index.dev.mjs
 package-lock.json
+pnpm-lock.yaml

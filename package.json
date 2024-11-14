@@ -1,10 +1,6 @@
 {
   "scripts": {
-    "dev": "kirbyup serve src/panel/index.js",
-    "build": "kirbyup src/panel/index.js"
-  },
-  "devDependencies": {
-    "kirbyup": "^3.1.4",
-    "sass": "^1.71.1"
+    "dev": "npx -y kirbyup serve src/panel/index.js",
+    "build": "npx -y kirbyup src/panel/index.js"
   }
 }
