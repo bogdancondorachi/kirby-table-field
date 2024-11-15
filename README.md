@@ -1,7 +1,11 @@
 ![Kirby Table Field](./.github/preview.png)
 
-# Kirby Table Field
-The table field makes possible to effortlessly create and manage tables within the panel. You can easily tailor tables to their specific needs, enhancing the efficiency and management of data presentation.
+[![Version](https://img.shields.io/badge/version-2.4.0-8dbae7.svg?style=for-the-badge)](https://github.com/bogdancondorachi/kirby-table-field/releases)
+[![Dependency](https://img.shields.io/badge/kirby-4.0--4.x-f0d575.svg?style=for-the-badge)](https://getkirby.com/)
+[![Donate](https://img.shields.io/badge/support-buy_me_a_coffee-bdde7a.svg?style=for-the-badge)](https://github.com/sponsors/bogdancondorachi)
+
+> [!NOTE]
+> The table field makes possible to effortlessly create and manage tables within the panel. You can easily tailor tables to their specific needs, enhancing the efficiency and management of data presentation.
 
 ## Installation
 
@@ -32,23 +36,20 @@ fields:
 ```
 
 ### Field Properties:
-| Name       | Type            | Default | Description                                                          |
-|:-----------|:----------------|:--------|:---------------------------------------------------------------------|
-| align      | `string`        | `-`     | Set the text alignment of the table                                  |
-| disabled   | `bool`          | `-`     | If `true`, the field is no longer editable and will not be saved     |
-| duplicate  | `bool`          | `true`  | Toggles duplicating columns and rows in the table                    |
-| empty      | `string`        | `-`     | The placeholder text if no rows exists                               |
-| help       | `string`        | `-`     | Optional help text below the field                                   |
-| index      | `int`, `bool`   | `1`     | Specifies the starting index. If set to `false`, it removes the index 
-column; in this case, `sortable` would be disabled as well                                                      |
-| label      | `string`        | `-`     | Set the label above the field                                        |
-| marks      | `bool`, `array` | `true`  | Set the allowed HTML formats. Activate/deactivate them all by passing 
-`true`/`false`                                                                                                  |
-| maxColumns | `int`           | `8`     | Set the maximum allowed columns in the table                         |
-| minColumns | `int`           | `2`     | Set the minimum required columns in the table                        |
-| sortable   | `bool`          | `true`  | Toggles drag & drop sorting                                          |
-| translate  | `bool`          | `true`  | If `false`, the field will be disabled in non-default languages and 
-cannot be translated. This is only relevant in multi-language setups.                                           |
+| Name       | Type            | Default | Description                                                      |
+|:-----------|:----------------|:--------|:-----------------------------------------------------------------|
+| align      | `string`        | `-`     | Set the text alignment of the table                              |
+| disabled   | `bool`          | `-`     | If `true`, the field is no longer editable and will not be saved |
+| duplicate  | `bool`          | `true`  | Toggles duplicating columns and rows in the table                |
+| empty      | `string`        | `-`     | The placeholder text if no rows exists                           |
+| help       | `string`        | `-`     | Optional help text below the field                               |
+| index      | `int`, `bool`   | `1`     | Specifies the starting index. If set to `false`, it removes the index column; in this case, `sortable` would be disabled as well                                                                        |
+| label      | `string`        | `-`     | Set the label above the field                                    |
+| marks      | `bool`, `array` | `true`  | Set the allowed HTML formats. Activate/deactivate them all by passing `true`/`false`                                                                                                     |
+| maxColumns | `int`           | `8`     | Set the maximum allowed columns in the table                     |
+| minColumns | `int`           | `2`     | Set the minimum required columns in the table                    |
+| sortable   | `bool`          | `true`  | Toggles drag & drop sorting                                      |
+| translate  | `bool`          | `true`  | If `false`, the field will be disabled in non-default languages and cannot be translated. This is only relevant in multi-language setups.                                                                     |
 
 ### Use the field in your template:
 ```php
@@ -128,10 +129,10 @@ if (!empty($table['headers']) && !empty($table['rows'])): ?>
 ```
 To overwrite this default snippet, place your custom file in `/site/snippets/blocks/table.php`
 
-## Credits
+## Buy me a coffee ☕
 
-- [Kirby Team](https://getkirby.com) for the [table](https://github.com/getkirby/kirby/blob/main/panel/src/components/Layout/Table.vue) layout.
-- [Rafael Giezendanner](https://github.com/ragi96) for the initial [table-field](https://github.com/ragi96/table-field) plugin.
+> [!NOTE]
+> This plugin is provided free of charge & published under the permissive MIT License.  If you're using it for a commercial project or just want to help keep it alive, please consider [donating](https://github.com/sponsors/bogdancondorachi). Your support fuels future development!
 
 ## License
 
