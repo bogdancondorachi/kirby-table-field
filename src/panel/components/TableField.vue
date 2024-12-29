@@ -480,7 +480,7 @@ export default {
         this.columns.splice(index + 1, 0, this.columns[index]);
         this.rows.forEach(column => column.splice(index + 1, 0, column[index]));
       } else if (type === 'row') {
-        this.table.splice(currentIndex, 0, this.table[currentIndex]);
+        this.table.splice(currentIndex, 0, [...this.table[currentIndex]]);
       }
 
       this.update();
