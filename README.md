@@ -33,7 +33,7 @@ fields:
   table:
     label: Table
     type: table
-    #optional (see field properties)
+    # optional (see field properties)
 ```
 
 ### Field Properties:
@@ -54,7 +54,7 @@ fields:
 
 ### Use the field in your template:
 ```php
-<?php 
+<?php
 $table = $page->table()->toTable();
 if (!empty($table['headers']) && !empty($table['rows'])): ?>
   <table>
@@ -105,7 +105,7 @@ To overwrite the default blueprint, place your custom file in `/site/blueprints/
 
 ### Snippet:
 ```php
-<?php 
+<?php
 $table = $block->table()->toTable();
 if (!empty($table['headers']) && !empty($table['rows'])): ?>
   <table>

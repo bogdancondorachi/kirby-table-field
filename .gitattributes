@@ -7,6 +7,8 @@
 src/panel/ export-ignore
 
 # Development files
+.vscode/ export-ignore
 .editorconfig export-ignore
 composer.lock export-ignore
+eslint.config.mjs export-ignore
 package.json export-ignore

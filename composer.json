@@ -13,10 +13,10 @@
     }
   ],
   "require": {
-		"php": ">=8.1.0 <8.4.0",
-		"getkirby/cms": "^4.0",
-		"getkirby/composer-installer": "^1.2"
-	},
+    "php": ">=8.1.0 <8.4.0",
+    "getkirby/cms": "^4.0",
+    "getkirby/composer-installer": "^1.2"
+  },
   "config": {
     "allow-plugins": {
       "getkirby/composer-installer": true

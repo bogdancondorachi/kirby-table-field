@@ -1,6 +1,15 @@
 {
+  "name": "kirby-table-field",
+  "type": "module",
+  "private": true,
   "scripts": {
     "dev": "npx -y kirbyup serve src/panel/index.js",
-    "build": "npx -y kirbyup src/panel/index.js"
-  }
+    "build": "npx -y kirbyup src/panel/index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^3.13.0"
+  },
+  "browserslist": "> 2%"
 }

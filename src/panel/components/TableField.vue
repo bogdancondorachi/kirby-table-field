@@ -2,27 +2,27 @@
   <k-field v-bind="$props" class="k-table-field">
     <template v-if="!disabled" #options>
       <k-button-group layout="collapsed">
-			  <k-button
-          :disabled="columns.length >= maxColumns"
-				  :text="$t('field.table.column')"
-				  icon="add"
-				  variant="filled"
-				  size="xs"
-				  @click="add('column')"
-			  />
         <k-button
-					icon="dots"
-					size="xs"
-					variant="filled"
-					@click="$refs.options.toggle()"
-				/>
-				<k-dropdown-content
-					ref="options"
-					:options="tableOptions"
-					align-x="end"
-				/>
+          :disabled="columns.length >= maxColumns"
+          :text="$t('field.table.column')"
+          icon="add"
+          variant="filled"
+          size="xs"
+          @click="add('column')"
+        />
+        <k-button
+          icon="dots"
+          size="xs"
+          variant="filled"
+          @click="$refs.options.toggle()"
+        />
+        <k-dropdown-content
+          ref="options"
+          :options="tableOptions"
+          align-x="end"
+        />
       </k-button-group>
-		</template>
+    </template>
 
     <div :aria-disabled="disabled" class="k-table">
       <table :data-disabled="disabled" :data-indexed="hasIndexColumn">
@@ -49,7 +49,7 @@
               :key="columnIndex + '-header'"
               :data-align="hasAlignment"
               data-mobile="true"
-              :class="['k-table-column', 'k-table-header', { 'k-table-sortable-row': isSortable }]"
+              class="k-table-column k-table-header" :class="[{ 'k-table-sortable-row': isSortable }]"
             >
               <k-bar>
                 <k-sort-handle v-if="isSortable" class="k-table-sort-handle" />
@@ -62,13 +62,15 @@
                   :placeholder="`${$t('field.table.column')} ${columnIndex + 1}`"
                   @input="update()"
                 />
-                <k-text v-else>{{ $t('field.table.column') }} {{ columnIndex + 1 }}</k-text>
+                <k-text v-else>
+                  {{ $t('field.table.column') }} {{ columnIndex + 1 }}
+                </k-text>
 
                 <k-options-dropdown
                   v-if="!disabled"
                   :options="columnOptions"
                   @option="columnOption($event, columnIndex)"
-								/>
+                />
               </k-bar>
             </th>
 
@@ -76,7 +78,7 @@
               v-if="hasOptions"
               data-mobile="true"
               class="k-table-options-column"
-            ></th>
+            />
           </k-draggable>
         </thead>
 
@@ -89,17 +91,17 @@
           @end="onDrag($event, 'row')"
         >
           <!-- Empty -->
-				  <tr v-if="rows.length === 0">
-					  <td :colspan="colspan" class="k-table-empty">
-						  {{ empty ?? $t('field.table.empty.rows') }}
-					  </td>
-				  </tr>
+          <tr v-if="rows.length === 0">
+            <td :colspan="colspan" class="k-table-empty">
+              {{ empty ?? $t('field.table.empty.rows') }}
+            </td>
+          </tr>
 
           <template v-else>
             <tr
               v-for="(row, rowIndex) in rows"
               :key="rowIndex"
-              :class="['k-table-row', { 'k-table-sortable-row': isSortable && rows.length > 1 }]"
+              class="k-table-row" :class="[{ 'k-table-sortable-row': isSortable && rows.length > 1 }]"
             >
               <!-- Index & drag handle -->
               <td
@@ -108,7 +110,7 @@
                 data-mobile="true"
                 class="k-table-index-column"
               >
-								<div class="k-table-index" v-text="index + rowIndex" />
+                <div class="k-table-index" v-text="index + rowIndex" />
 
                 <k-sort-handle
                   v-if="isSortable && rows.length > 1"
@@ -144,7 +146,7 @@
                 <k-options-dropdown
                   :options="rowOptions"
                   @option="rowOption($event, rowIndex)"
-								/>
+                />
               </td>
             </tr>
           </template>
@@ -167,39 +169,39 @@
 
 <script>
 export default {
-  extends: 'k-field',
+  extends: "k-field",
   props: {
     align: String,
     duplicate: {
       type: Boolean,
-      default: true
+      default: true,
     },
     empty: String,
     headers: {
       type: Boolean,
-      default: true
+      default: true,
     },
     index: {
-			type: [Number, Boolean],
-			default: 1
-		},
+      type: [Number, Boolean],
+      default: 1,
+    },
     minColumns: {
       type: Number,
-      default: 2
+      default: 2,
     },
     maxColumns: {
       type: Number,
-      default: 8
+      default: 8,
     },
     marks: {
       type: [Boolean, Array],
-      default: true
+      default: true,
     },
     sortable: {
       type: Boolean,
-      default: true
+      default: true,
     },
-    value: [String, Array]
+    value: [String, Array],
   },
   computed: {
     values() {
@@ -209,21 +211,21 @@ export default {
       return this.hasHeaders
         ? this.table[0]
         : this.table[0].length > 0
-          ? Array(this.table[0].length).fill('')
-          : Array(this.minColumns).fill('');
+          ? Array.from({ length: this.table[0].length }).fill("")
+          : Array.form({ length: this.minColumns }).fill("");
     },
     rows() {
       return this.hasHeaders ? this.table.slice(1) : this.table;
     },
     colspan() {
-			let span = this.columns.length;
+      let span = this.columns.length;
 
-			if (this.hasIndexColumn) {
-				span++;
-			}
+      if (this.hasIndexColumn) {
+        span++;
+      }
 
-			return span;
-		},
+      return span;
+    },
     hasHeaders() {
       return this.headers;
     },
@@ -234,27 +236,27 @@ export default {
       return !this.disabled && this.rows.length !== 0;
     },
     hasIndexColumn() {
-			return this.isSortable || this.index !== false;
-		},
+      return this.isSortable || this.index !== false;
+    },
     isSortable() {
       return !this.disabled && this.index !== false && this.sortable;
     },
     table() {
-      const clearValue = (value) => value.trim().replace(/^[>\|-]?\s*["']?(.*?)["']?$/, '$1') || '';
-      const isRowBreak = (value) => /^\s*-\s*$/.test(value);
-      const isMultiline = (value) => /^\s*-\s*[>|]\s*$/.test(value);
+      const clearValue = value => value.trim().replace(/^[>\\|-]?[\s"']*(.*?)["']?$/, "$1") || "";
+      const isRowBreak = value => /^\s*-\s*$/.test(value);
+      const isMultiline = value => /^\s*-\s*[>|]\s*$/.test(value);
 
       const parseRows = (value) => {
         const rows = [];
         let currentRow = [];
-        let currentCell = '';
+        let currentCell = "";
         let inMultilineCell = false;
 
-        value.split('\n').forEach((line) => {
+        value.split("\n").forEach((line) => {
           if (isRowBreak(line)) {
             if (inMultilineCell) {
               currentRow.push(clearValue(currentCell));
-              currentCell = '';
+              currentCell = "";
               inMultilineCell = false;
             }
             if (currentRow.length > 0) {
@@ -264,19 +266,19 @@ export default {
           } else if (isMultiline(line)) {
             if (inMultilineCell) {
               currentRow.push(clearValue(currentCell));
-              currentCell = '';
+              currentCell = "";
             }
             inMultilineCell = true;
           } else if (inMultilineCell) {
-            if (line.trim().startsWith('-') && !line.trim().startsWith('- >')) {
+            if (line.trim().startsWith("-") && !line.trim().startsWith("- >")) {
               inMultilineCell = false;
               currentRow.push(clearValue(currentCell));
-              currentCell = '';
+              currentCell = "";
               if (!isRowBreak(line)) {
                 currentRow.push(clearValue(line));
               }
             } else {
-              currentCell += (currentCell ? '\n' : '') + line.trim();
+              currentCell += (currentCell ? "\n" : "") + line.trim();
             }
           } else {
             currentRow.push(clearValue(line));
@@ -287,177 +289,178 @@ export default {
           currentRow.push(clearValue(currentCell));
         }
 
-        if (currentRow.length > 0) rows.push(currentRow);
+        if (currentRow.length > 0)
+          rows.push(currentRow);
 
         return rows;
       };
 
-      let rows = typeof this.value === 'string' ? parseRows(this.value) : this.value;
+      let rows = typeof this.value === "string" ? parseRows(this.value) : this.value;
 
-      rows ||= Array.from({ length: this.hasHeaders ? 2 : 1 }, () => Array(this.minColumns).fill(''));
-      rows.forEach(row => {
-        while (row.length < this.minColumns) row.push('');
+      rows ||= Array.from({ length: this.hasHeaders ? 2 : 1 }, () => Array.from({ lenght: this.minColumns }).fill(""));
+      rows.forEach((row) => {
+        while (row.length < this.minColumns) row.push("");
       });
 
       return rows;
     },
     dragOptions() {
-			return {
+      return {
         disabled: !this.sortable,
         draggable: ".k-table-sortable-row",
-        fallbackClass: 'k-table-row-fallback',
-        ghostClass: 'k-table-row-ghost'
-			};
-		},
+        fallbackClass: "k-table-row-fallback",
+        ghostClass: "k-table-row-ghost",
+      };
+    },
     tableOptions() {
       return [
-				{
-					click: () => this.remove('all'),
+        {
+          click: () => this.remove("all"),
           disabled: this.rows.length === 0 && this.columns.length <= this.minColumns,
-					icon: 'trash',
-					text: this.$t('delete.all')
-				}
+          icon: "trash",
+          text: this.$t("delete.all"),
+        },
       ];
     },
     columnOptions() {
       return [
         {
           disabled: this.columns.length >= this.maxColumns,
-          icon: 'angle-left',
-          text: this.$t('insert.before'),
-          click: 'insertBefore'
+          icon: "angle-left",
+          text: this.$t("insert.before"),
+          click: "insertBefore",
         },
         {
           disabled: this.columns.length >= this.maxColumns,
-          icon: 'angle-right',
-          text: this.$t('insert.after'),
-          click: 'insertAfter'
+          icon: "angle-right",
+          text: this.$t("insert.after"),
+          click: "insertAfter",
         },
-        '-',
+        "-",
         {
-          icon: 'eraser',
-          text: this.$t('field.table.clear'),
-          click: 'clear'
+          icon: "eraser",
+          text: this.$t("field.table.clear"),
+          click: "clear",
         },
         {
           disabled: !this.duplicate || this.columns.length >= this.maxColumns,
-          icon: 'copy',
-          text: this.$t('duplicate'),
-          click: 'duplicate'
+          icon: "copy",
+          text: this.$t("duplicate"),
+          click: "duplicate",
         },
-        '-',
+        "-",
         {
           disabled: this.columns.length <= this.minColumns,
-          icon: 'trash',
-          text: this.$t('delete'),
-          click: 'remove'
-        }
+          icon: "trash",
+          text: this.$t("delete"),
+          click: "remove",
+        },
       ];
     },
     rowOptions() {
       return [
         {
-          icon: 'angle-up',
-          text: this.$t('insert.before'),
-          click: 'insertBefore'
+          icon: "angle-up",
+          text: this.$t("insert.before"),
+          click: "insertBefore",
         },
         {
-          icon: 'angle-down',
-          text: this.$t('insert.after'),
-          click: 'insertAfter'
+          icon: "angle-down",
+          text: this.$t("insert.after"),
+          click: "insertAfter",
         },
-        '-',
+        "-",
         {
-          icon: 'eraser',
-          text: this.$t('field.table.clear'),
-          click: 'clear'
+          icon: "eraser",
+          text: this.$t("field.table.clear"),
+          click: "clear",
         },
         {
           disabled: !this.duplicate,
-          icon: 'copy',
-          text: this.$t('duplicate'),
-          click: 'duplicate'
+          icon: "copy",
+          text: this.$t("duplicate"),
+          click: "duplicate",
         },
-        '-',
+        "-",
         {
           disabled: this.rows.length <= 1,
-          icon: 'trash',
-          text: this.$t('delete'),
-          click: 'remove'
-        }
+          icon: "trash",
+          text: this.$t("delete"),
+          click: "remove",
+        },
       ];
     },
   },
   methods: {
     columnOption(option, columnIndex) {
       switch (option) {
-        case 'insertBefore':
-          this.insert('column', columnIndex, 'before')
+        case "insertBefore":
+          this.insert("column", columnIndex, "before");
           break;
-        case 'insertAfter':
-          this.insert('column', columnIndex, 'after')
+        case "insertAfter":
+          this.insert("column", columnIndex, "after");
           break;
-        case 'clear':
-          this.clear('column', columnIndex)
+        case "clear":
+          this.clear("column", columnIndex);
           break;
-        case 'duplicate':
-          this.duplicate('column', columnIndex)
+        case "duplicate":
+          this.duplicate("column", columnIndex);
           break;
-        case 'remove':
-          this.remove('column', columnIndex);
+        case "remove":
+          this.remove("column", columnIndex);
           break;
       }
     },
     rowOption(option, rowIndex) {
       switch (option) {
-        case 'insertBefore':
-          this.insert('row', rowIndex, 'before')
+        case "insertBefore":
+          this.insert("row", rowIndex, "before");
           break;
-        case 'insertAfter':
-          this.insert('row', rowIndex, 'after')
+        case "insertAfter":
+          this.insert("row", rowIndex, "after");
           break;
-        case 'clear':
-          this.clear('row', rowIndex)
+        case "clear":
+          this.clear("row", rowIndex);
           break;
-        case 'duplicate':
-          this.duplicate('row', rowIndex)
+        case "duplicate":
+          this.duplicate("row", rowIndex);
           break;
-        case 'remove':
-          this.remove('row', rowIndex);
+        case "remove":
+          this.remove("row", rowIndex);
           break;
       }
     },
     showDialog(message, callback) {
       this.$panel.dialog.open({
-        component: 'k-remove-dialog',
+        component: "k-remove-dialog",
         props: { text: message },
         on: {
           submit: () => {
             callback();
             this.update();
             this.$panel.dialog.close();
-          }
-        }
+          },
+        },
       });
     },
     add(type) {
-      if (type === 'column') {
-        this.table.forEach(column => column.push(''));
-      } else if (type === 'row') {
-        this.table.push(Array(this.columns.length).fill(''));
+      if (type === "column") {
+        this.table.forEach(column => column.push(""));
+      } else if (type === "row") {
+        this.table.push(Array.from({ length: this.columns.length }).fill(""));
       }
 
       this.update();
     },
-    insert(type, index, insert = 'before') {
-      const currentIndex = (type === 'column') ? index : (this.hasHeaders ? index + 1 : index);
-      const insertIndex = (insert === 'before') ? currentIndex : currentIndex + 1;
+    insert(type, index, insert = "before") {
+      const currentIndex = (type === "column") ? index : (this.hasHeaders ? index + 1 : index);
+      const insertIndex = (insert === "before") ? currentIndex : currentIndex + 1;
 
-      if (type === 'column') {
-        this.columns.splice(insertIndex, 0, '');
-        this.rows.forEach(column => column.splice(insertIndex, 0, ''));
-      } else if (type === 'row') {
-        this.table.splice(insertIndex, 0, Array(this.columns.length).fill(''));
+      if (type === "column") {
+        this.columns.splice(insertIndex, 0, "");
+        this.rows.forEach(column => column.splice(insertIndex, 0, ""));
+      } else if (type === "row") {
+        this.table.splice(insertIndex, 0, Array.from({ length: this.columns.length }).fill(""));
       }
 
       this.update();
@@ -465,10 +468,10 @@ export default {
     clear(type, index) {
       const currentIndex = this.hasHeaders ? index + 1 : index;
 
-      if (type === 'column') {
-        this.table.forEach(column => column[index] = '');
-      } else if (type === 'row') {
-        this.table[currentIndex].fill('');
+      if (type === "column") {
+        this.table.forEach(column => column[index] = "");
+      } else if (type === "row") {
+        this.table[currentIndex].fill("");
       }
 
       this.update();
@@ -476,52 +479,52 @@ export default {
     duplicate(type, index) {
       const currentIndex = this.hasHeaders ? index + 1 : index;
 
-      if (type === 'column') {
+      if (type === "column") {
         this.columns.splice(index + 1, 0, this.columns[index]);
         this.rows.forEach(column => column.splice(index + 1, 0, column[index]));
-      } else if (type === 'row') {
+      } else if (type === "row") {
         this.table.splice(currentIndex, 0, [...this.table[currentIndex]]);
       }
 
       this.update();
     },
     remove(type, index) {
-      if (type === 'column') {
-        const message = this.$t('field.table.delete.confirm.column');
+      if (type === "column") {
+        const message = this.$t("field.table.delete.confirm.column");
         this.showDialog(message, () => {
           this.table.forEach(column => column.splice(index, 1));
         });
-      } else if (type === 'row') {
-        const message = this.$t('field.table.delete.confirm.row');
+      } else if (type === "row") {
+        const message = this.$t("field.table.delete.confirm.row");
         this.showDialog(message, () => {
           const currentIndex = this.hasHeaders ? index + 1 : index;
           this.table.splice(currentIndex, 1);
         });
-      } else if (type === 'all') {
-        const message = this.$t('field.table.delete.confirm.all');
+      } else if (type === "all") {
+        const message = this.$t("field.table.delete.confirm.all");
         this.showDialog(message, () => {
-          this.columns.splice(0, this.columns.length, Array(this.minColumns).fill(''));
-          this.table.splice(0, this.table.length, Array(this.minColumns).fill(''));
+          this.columns.splice(0, this.columns.length, Array.from({ length: this.minColumns }).fill(""));
+          this.table.splice(0, this.table.length, Array.from({ length: this.minColumns }).fill(""));
         });
       }
     },
     onDrag(event, type) {
-      const currentIndex = (type === 'column') ? -1 : (this.hasHeaders ? 1 : 0);
+      const currentIndex = (type === "column") ? -1 : (this.hasHeaders ? 1 : 0);
       const oldIndex = event.oldIndex + currentIndex;
       const newIndex = event.newIndex + currentIndex;
 
-      if (type === 'column') {
+      if (type === "column") {
         this.columns.splice(newIndex, 0, ...this.columns.splice(oldIndex, 1));
         this.rows.forEach(column => column.splice(newIndex, 0, ...column.splice(oldIndex, 1)));
-      } else if (type === 'row') {
+      } else if (type === "row") {
         this.table.splice(newIndex, 0, ...this.table.splice(oldIndex, 1));
       }
 
       this.update();
     },
     update() {
-      this.$emit('input', this.table);
-    }
-  }
+      this.$emit("input", this.table);
+    },
+  },
 };
 </script>
