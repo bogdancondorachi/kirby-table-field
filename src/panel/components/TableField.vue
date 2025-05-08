@@ -212,7 +212,7 @@ export default {
         ? this.table[0]
         : this.table[0].length > 0
           ? Array.from({ length: this.table[0].length }).fill("")
-          : Array.form({ length: this.minColumns }).fill("");
+          : Array.from({ length: this.minColumns }).fill("");
     },
     rows() {
       return this.hasHeaders ? this.table.slice(1) : this.table;
@@ -297,7 +297,7 @@ export default {
 
       let rows = typeof this.value === "string" ? parseRows(this.value) : this.value;
 
-      rows ||= Array.from({ length: this.hasHeaders ? 2 : 1 }, () => Array.from({ lenght: this.minColumns }).fill(""));
+      rows ||= Array.from({ length: this.hasHeaders ? 2 : 1 }, () => Array.from({ length: this.minColumns }).fill(""));
       rows.forEach((row) => {
         while (row.length < this.minColumns) row.push("");
       });
