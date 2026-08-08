@@ -29,7 +29,6 @@
         <!-- Header Row -->
         <thead>
           <k-draggable
-            :list="values"
             :options="dragOptions"
             :handle="true"
             element="tr"
@@ -84,7 +83,6 @@
 
         <!-- Rows -->
         <k-draggable
-          :list="values"
           :options="dragOptions"
           :handle="true"
           element="tbody"
@@ -100,7 +98,7 @@
           <template v-else>
             <tr
               v-for="(row, rowIndex) in rows"
-              :key="rowIndex"
+              :key="'row-' + rowIndex"
               class="k-table-row" :class="[{ 'k-table-sortable-row': isSortable && rows.length > 1 }]"
             >
               <!-- Index & drag handle -->
@@ -204,9 +202,6 @@ export default {
     value: [String, Array],
   },
   computed: {
-    values() {
-      return [...this.table];
-    },
     columns() {
       return this.hasHeaders
         ? this.table[0]
@@ -457,8 +452,7 @@ export default {
       const insertIndex = (insert === "before") ? currentIndex : currentIndex + 1;
 
       if (type === "column") {
-        this.columns.splice(insertIndex, 0, "");
-        this.rows.forEach(column => column.splice(insertIndex, 0, ""));
+        this.table.forEach(row => row.splice(insertIndex, 0, ""));
       } else if (type === "row") {
         this.table.splice(insertIndex, 0, Array.from({ length: this.columns.length }).fill(""));
       }
@@ -480,8 +474,7 @@ export default {
       const currentIndex = this.hasHeaders ? index + 1 : index;
 
       if (type === "column") {
-        this.columns.splice(index + 1, 0, this.columns[index]);
-        this.rows.forEach(column => column.splice(index + 1, 0, column[index]));
+        this.table.forEach(row => row.splice(index + 1, 0, row[index]));
       } else if (type === "row") {
         this.table.splice(currentIndex, 0, [...this.table[currentIndex]]);
       }
@@ -503,21 +496,57 @@ export default {
       } else if (type === "all") {
         const message = this.$t("field.table.delete.confirm.all");
         this.showDialog(message, () => {
-          this.columns.splice(0, this.columns.length, Array.from({ length: this.minColumns }).fill(""));
-          this.table.splice(0, this.table.length, Array.from({ length: this.minColumns }).fill(""));
+          const emptyTable = Array.from({ length: this.hasHeaders ? 2 : 1 }, () => Array.from({ length: this.minColumns }).fill(""));
+          this.table.splice(0, this.table.length, ...emptyTable);
         });
       }
     },
     onDrag(event, type) {
-      const currentIndex = (type === "column") ? -1 : (this.hasHeaders ? 1 : 0);
-      const oldIndex = event.oldIndex + currentIndex;
-      const newIndex = event.newIndex + currentIndex;
+      const { oldIndex: rawOldIndex, newIndex: rawNewIndex } = event;
+
+      if (rawOldIndex === undefined || rawNewIndex === undefined || rawOldIndex === rawNewIndex) {
+        return;
+      }
+
+      if (event.from && event.item) {
+        event.item.remove();
+        const children = Array.from(event.from.children);
+        if (rawOldIndex >= children.length) {
+          event.from.appendChild(event.item);
+        } else {
+          event.from.insertBefore(event.item, children[rawOldIndex] || null);
+        }
+      }
 
       if (type === "column") {
-        this.columns.splice(newIndex, 0, ...this.columns.splice(oldIndex, 1));
-        this.rows.forEach(column => column.splice(newIndex, 0, ...column.splice(oldIndex, 1)));
+        const offset = this.hasIndexColumn ? 1 : 0;
+        const oldColIndex = rawOldIndex - offset;
+        const newColIndex = rawNewIndex - offset;
+
+        const maxCol = this.columns.length - 1;
+        const validOld = Math.max(0, Math.min(oldColIndex, maxCol));
+        const validNew = Math.max(0, Math.min(newColIndex, maxCol));
+
+        if (validOld === validNew) {
+          return;
+        }
+
+        this.table.forEach((row) => {
+          const [col] = row.splice(validOld, 1);
+          row.splice(validNew, 0, col);
+        });
       } else if (type === "row") {
-        this.table.splice(newIndex, 0, ...this.table.splice(oldIndex, 1));
+        const maxRow = this.rows.length - 1;
+        const validOld = Math.max(0, Math.min(rawOldIndex, maxRow));
+        const validNew = Math.max(0, Math.min(rawNewIndex, maxRow));
+
+        if (validOld === validNew) {
+          return;
+        }
+
+        const offset = this.hasHeaders ? 1 : 0;
+        const [row] = this.table.splice(validOld + offset, 1);
+        this.table.splice(validNew + offset, 0, row);
       }
 
       this.update();
