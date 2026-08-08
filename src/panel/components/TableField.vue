@@ -99,12 +99,12 @@
             <tr
               v-for="(row, rowIndex) in rows"
               :key="'row-' + rowIndex"
-              class="k-table-row" :class="[{ 'k-table-sortable-row': isSortable && rows.length > 1 }]"
+              :class="[{ 'k-table-sortable-row': isSortable && rows.length > 1 }]"
+              :data-sortable="isSortable && rows.length > 1"
             >
               <!-- Index & drag handle -->
               <td
                 v-if="hasIndexColumn"
-                :data-sortable="isSortable && rows.length > 1"
                 data-mobile="true"
                 class="k-table-index-column"
               >
