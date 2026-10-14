@@ -1,5 +1,9 @@
 <?php
 
+load([
+  'Bogdancondorachi\\TableField\\Table' => 'src/extensions/Table.php'
+], __DIR__);
+
 Kirby::plugin('bogdancondorachi/table-field', [
   'fields' => [
     'table' => []
