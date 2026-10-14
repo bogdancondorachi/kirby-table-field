@@ -5,6 +5,13 @@
 ![Dependency](https://img.shields.io/packagist/dependency-v/bogdancondorachi/kirby-table-field/php?style=for-the-badge&label=PHP&labelColor=3d444d&color=7C72FF)
 ![Downloads](https://img.shields.io/packagist/dt/bogdancondorachi/kirby-table-field?style=for-the-badge&labelColor=3d444d&color=2DA44E)
 
+## Compatibility
+
+| Plugin version | Kirby version | PHP version |
+| -------------- | ------------- | ----------- |
+| 3.x            | 6             | 8.3 – 8.5   |
+| 2.x            | 4, 5          | 8.2 – 8.5   |
+
 > [!NOTE]
 > This flexible yet powerful panel field is designed to effortlessly manage and display large datasets. It enables users to dynamically add, edit, and organize data in rows and columns, offering intuitive controls for adding, removing, duplicating, and rearranging entries. Ideal for handling complex data structures while ensuring a clean and user-friendly interface.
 

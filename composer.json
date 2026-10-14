@@ -23,6 +23,9 @@
     }
   },
   "extra": {
+    "kirby": {
+      "compatible": "^6.0"
+    },
     "installer-name": "table-field",
     "kirby-cms-path": false
   }
