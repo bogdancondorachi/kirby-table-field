@@ -381,14 +381,14 @@ export default {
           this.clear("column", columnIndex);
           break;
         case "duplicate":
-          this.duplicate("column", columnIndex);
+          this.duplicateItem("column", columnIndex);
           break;
         case "remove":
           this.remove("column", columnIndex);
           break;
       }
     },
-    duplicate(type, index) {
+    duplicateItem(type, index) {
       if (type === "column") {
         this.table.forEach(row => row.splice(index + 1, 0, row[index]));
       } else if (type === "row") {
@@ -490,7 +490,7 @@ export default {
           this.clear("row", rowIndex);
           break;
         case "duplicate":
-          this.duplicate("row", rowIndex);
+          this.duplicateItem("row", rowIndex);
           break;
         case "remove":
           this.remove("row", rowIndex);
