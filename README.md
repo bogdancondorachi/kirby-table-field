@@ -1,36 +1,41 @@
 ![Kirby Table Field](./.github/preview.png)
 
-![Version](https://img.shields.io/packagist/v/bogdancondorachi/kirby-table-field?style=for-the-badge&label=Version&labelColor=3d444d&color=096BDE)
-![Dependency](https://img.shields.io/packagist/dependency-v/bogdancondorachi/kirby-table-field/getkirby%2Fcms?style=for-the-badge&label=Kirby&labelColor=3d444d&color=F4E162)
-![Dependency](https://img.shields.io/packagist/dependency-v/bogdancondorachi/kirby-table-field/php?style=for-the-badge&label=PHP&labelColor=3d444d&color=7C72FF)
+![Version](https://img.shields.io/badge/Version-V2.5.0-096BDE?style=for-the-badge&labelColor=3d444d)
+![Dependency](https://img.shields.io/packagist/dependency-v/bogdancondorachi/kirby-table-field/getkirby%2Fcms?version=2.5.0&style=for-the-badge&label=Kirby&labelColor=3d444d&color=F4E162)
+![Dependency](https://img.shields.io/packagist/dependency-v/bogdancondorachi/kirby-table-field/php?version=2.5.0&style=for-the-badge&label=PHP&labelColor=3d444d&color=7C72FF)
 ![Downloads](https://img.shields.io/packagist/dt/bogdancondorachi/kirby-table-field?style=for-the-badge&labelColor=3d444d&color=2DA44E)
+
+# Kirby Table Field
 
 > [!NOTE]
 > This flexible yet powerful panel field is designed to effortlessly manage and display large datasets. It enables users to dynamically add, edit, and organize data in rows and columns, offering intuitive controls for adding, removing, duplicating, and rearranging entries. Ideal for handling complex data structures while ensuring a clean and user-friendly interface.
 
 ## Compatibility
 
-| Plugin | Kirby CMS | PHP |
-| ------ | --------- | --- |
-| 3.x    | 6.x       | 8.3 – 8.5 |
-| 2.x    | 4.x, 5.x  | 8.2 – 8.5 |
+| Plugin | Kirby CMS | PHP       |
+| ------ | --------- | --------- |
+| 3.x    | 6         | 8.3 – 8.5 |
+| 2.x    | 4, 5      | 8.2 – 8.5 |
+
+> [!IMPORTANT]
+> For Kirby 6, use plugin version `3.x`. For Kirby 4 and 5, use plugin version `2.x`.
 
 ## Installation
 
 ### Composer
 
 ```bash
-composer require bogdancondorachi/kirby-table-field
+composer require bogdancondorachi/kirby-table-field:^2.5
 ```
 
 ### Git Submodule
 ```bash
-git submodule add https://github.com/bogdancondorachi/kirby-table-field.git site/plugins/table-field
+git submodule add -b 2.x https://github.com/bogdancondorachi/kirby-table-field.git site/plugins/table-field
 ```
 
 ### Manual
 
-[Download](https://api.github.com/repos/bogdancondorachi/kirby-table-field/zipball) and extract the folder to `/site/plugins/table-field`
+[Download](https://api.github.com/repos/bogdancondorachi/kirby-table-field/zipball/2.x) and extract the folder to `/site/plugins/table-field`
 
 ## Field Usage
 
@@ -50,6 +55,7 @@ fields:
 | disabled   | `bool`          | `-`     | If `true`, the field is no longer editable and will not be saved |
 | duplicate  | `bool`          | `true`  | Toggles duplicating columns and rows in the table                |
 | empty      | `string`        | `-`     | The placeholder text if no rows exists                           |
+| headers    | `bool`          | `true`  | Toggles the header row in the table                              |
 | help       | `string`        | `-`     | Optional help text below the field                               |
 | index      | `int`, `bool`   | `1`     | Specifies the starting index. If set to `false`, it removes the index column; in this case, `sortable` would be disabled as well                                                                        |
 | label      | `string`        | `-`     | Set the label above the field                                    |
@@ -110,7 +116,7 @@ fields:
 ```
 To overwrite the default blueprint, place your custom file in `/site/blueprints/blocks/table.yml`
 
-### Snippet:
+### Overwrite default snippet:
 ```php
 <?php
 $table = $block->table()->toTable($block);
@@ -135,7 +141,7 @@ if (!empty($table['headers']) && !empty($table['rows'])): ?>
   </table>
 <?php endif ?>
 ```
-To overwrite this default snippet, place your custom file in `/site/snippets/blocks/table.php`
+To overwrite the default snippet, place your custom file in `/site/snippets/blocks/table.php`
 
 ## Buy me a coffee ☕
 
@@ -144,4 +150,4 @@ To overwrite this default snippet, place your custom file in `/site/snippets/blo
 
 ## License
 
-[MIT License](./LICENSE) Copyright © 2024 [Bogdan Condorachi](https://github.com/bogdancondorachi)
+[MIT License](./LICENSE) Copyright © 2026 [Bogdan Condorachi](https://github.com/bogdancondorachi)
