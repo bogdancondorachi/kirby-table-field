@@ -463,9 +463,10 @@ export default {
       const currentIndex = this.hasHeaders ? index + 1 : index;
 
       if (type === "column") {
-        this.table.forEach(column => column[index] = "");
+        this.table.forEach(row => row.splice(index, 1, ""));
       } else if (type === "row") {
-        this.table[currentIndex].fill("");
+        const row = this.table[currentIndex];
+        row.forEach((_, columnIndex) => row.splice(columnIndex, 1, ""));
       }
 
       this.update();
