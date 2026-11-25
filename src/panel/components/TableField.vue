@@ -399,7 +399,7 @@ export default {
           this.clear("column", columnIndex);
           break;
         case "duplicate":
-          this.duplicate("column", columnIndex);
+          this.duplicateItem("column", columnIndex);
           break;
         case "remove":
           this.remove("column", columnIndex);
@@ -418,7 +418,7 @@ export default {
           this.clear("row", rowIndex);
           break;
         case "duplicate":
-          this.duplicate("row", rowIndex);
+          this.duplicateItem("row", rowIndex);
           break;
         case "remove":
           this.remove("row", rowIndex);
@@ -470,7 +470,7 @@ export default {
 
       this.update();
     },
-    duplicate(type, index) {
+    duplicateItem(type, index) {
       const currentIndex = this.hasHeaders ? index + 1 : index;
 
       if (type === "column") {
