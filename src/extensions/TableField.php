@@ -2,68 +2,69 @@
 
 namespace Bogdancondorachi\TableField;
 
-use Kirby\Form\Field\InputField;
-use Kirby\Form\Mixin;
-use Kirby\Reflection\Attributes\Prop;
+use Kirby\Form\FieldClass;
+use Kirby\Form\Mixin\EmptyState;
 
 /**
  * Allows editors to manage a simple table with
  * text headers and writer cells
  */
-class TableField extends InputField
+class TableField extends FieldClass
 {
-  use Mixin\Duplicate;
-  use Mixin\EmptyState;
-  use Mixin\Sortable;
+  use EmptyState;
 
   /**
    * Text alignment of all cells
    */
-  #[Prop]
   protected string|null $align = null;
 
   /**
    * If `false`, the first row is treated as a regular row
    */
-  #[Prop]
   protected bool $headers = true;
 
   /**
    * Start number of the index column or `false` to hide it
    */
-  #[Prop]
   protected bool|int $index = 1;
 
   /**
    * Allowed writer marks in cells
    */
-  #[Prop]
   protected array|bool $marks = true;
 
   /**
    * Upper limit of columns
    */
-  #[Prop]
   protected int $maxColumns = 8;
 
   /**
    * Lower limit of columns
    */
-  #[Prop]
   protected int $minColumns = 2;
 
-  protected array $value = [];
+  protected bool $duplicate = true;
+  protected bool $sortable = true;
+  protected mixed $value = [];
+
+  public function __construct(array $params = [])
+  {
+    parent::__construct($params);
+
+    $this->align = $params['align'] ?? null;
+    $this->duplicate = $params['duplicate'] ?? true;
+    $this->headers = $params['headers'] ?? true;
+    $this->index = $params['index'] ?? 1;
+    $this->marks = $params['marks'] ?? true;
+    $this->maxColumns = $params['maxColumns'] ?? 8;
+    $this->minColumns = $params['minColumns'] ?? 2;
+    $this->setEmpty($params['empty'] ?? null);
+    $this->sortable = $params['sortable'] ?? true;
+  }
 
   public function align(): string|null
   {
     return $this->align;
-  }
-
-  public function fill(mixed $value): static
-  {
-    return parent::fill(
-      value: Table::rows($value)
-    );
   }
 
   public function headers(): bool
@@ -89,5 +90,30 @@ class TableField extends InputField
   public function minColumns(): int
   {
     return $this->minColumns;
+  }
+
+  public function props(): array
+  {
+    return [
+      'align'       => $this->align(),
+      'duplicate'   => $this->duplicate,
+      'empty'       => $this->empty(),
+      'headers'     => $this->headers(),
+      'index'       => $this->index(),
+      'marks'       => $this->marks(),
+      'maxColumns'  => $this->maxColumns(),
+      'minColumns'  => $this->minColumns(),
+      'sortable'    => $this->sortable,
+    ] + parent::props();
+  }
+
+  public function toFormValue(): mixed
+  {
+    return Table::rows($this->value);
+  }
+
+  public function value(bool $default = false): mixed
+  {
+    return Table::rows(parent::value($default));
   }
 }
