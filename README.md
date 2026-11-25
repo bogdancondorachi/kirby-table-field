@@ -8,6 +8,13 @@
 > [!NOTE]
 > This flexible yet powerful panel field is designed to effortlessly manage and display large datasets. It enables users to dynamically add, edit, and organize data in rows and columns, offering intuitive controls for adding, removing, duplicating, and rearranging entries. Ideal for handling complex data structures while ensuring a clean and user-friendly interface.
 
+## Compatibility
+
+| Plugin | Kirby CMS | PHP |
+| ------ | --------- | --- |
+| 3.x    | 6.x       | 8.3 – 8.5 |
+| 2.x    | 4.x, 5.x  | 8.2 – 8.5 |
+
 ## Installation
 
 ### Composer
