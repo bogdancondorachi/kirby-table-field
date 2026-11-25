@@ -113,7 +113,7 @@ To overwrite the default blueprint, place your custom file in `/site/blueprints/
 ### Snippet:
 ```php
 <?php
-$table = $block->table()->toTable();
+$table = $block->table()->toTable($block);
 if (!empty($table['headers']) && !empty($table['rows'])): ?>
   <table>
     <thead>

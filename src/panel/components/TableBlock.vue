@@ -18,12 +18,16 @@
               class="k-table-column"
             >
               <k-text-input
+                v-if="hasHeaders"
                 v-model="columns[columnIndex]"
                 type="text"
                 :spellcheck="false"
                 :placeholder="`${$t('field.table.column')} ${columnIndex + 1}`"
                 @input="update"
               />
+              <k-text v-else>
+                {{ $t('field.table.column') }} {{ columnIndex + 1 }}
+              </k-text>
             </th>
           </tr>
         </thead>
@@ -60,16 +64,28 @@ export default {
       return this.field("caption", { marks: true }).marks;
     },
     table() {
-      return this.content.table ?? Array.from({ length: 2 }, () => Array.from({ length: 2 }).fill(""));
+      return this.content.table ?? Array.from(
+        { length: this.hasHeaders ? 2 : 1 },
+        () => Array.from({ length: 2 }).fill(""),
+      );
     },
     columns() {
-      return this.table[0];
+      const firstRow = this.table[0] ?? [];
+
+      return this.hasHeaders
+        ? firstRow
+        : Array.from({
+            length: firstRow.length || this.tableField.minColumns || 2,
+          }).fill("");
     },
     rows() {
-      return this.table.slice(1);
+      return this.hasHeaders ? this.table.slice(1) : this.table;
     },
     tableField() {
       return this.field("table");
+    },
+    hasHeaders() {
+      return this.tableField.headers !== false;
     },
     hasAlignment() {
       return this.tableField.align;
