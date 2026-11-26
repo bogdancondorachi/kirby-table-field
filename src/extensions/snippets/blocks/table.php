@@ -1,7 +1,7 @@
 <?php
 /** @var \Kirby\Cms\Block $block */
-$table   = $block->table()->toTable();
-$caption = $block->caption();  
+$table   = $block->table()->toTable($block);
+$caption = $block->caption();
 ?>
 <?php if($table != null): ?>
 <table>

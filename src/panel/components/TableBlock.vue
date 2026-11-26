@@ -18,12 +18,16 @@
               class="k-table-column"
             >
               <k-text-input
+                v-if="hasHeaders"
                 type="text"
                 :spellcheck="false"
                 :placeholder="`${$t('field.table.column')} ${columnIndex + 1}`"
                 :value="column"
                 @input="updateCell(0, columnIndex, $event)"
               />
+              <k-text v-else>
+                {{ $t("field.table.column") }} {{ columnIndex + 1 }}
+              </k-text>
             </th>
           </tr>
         </thead>
@@ -43,7 +47,7 @@
                 :marks="tableField.marks"
                 :spellcheck="false"
                 :value="cell"
-                @input="updateCell(rowIndex + 1, columnIndex, $event)"
+                @input="updateCell(rowIndex + rowOffset, columnIndex, $event)"
               />
             </td>
           </tr>
@@ -60,13 +64,27 @@ export default {
       return this.field("caption", { marks: true }).marks;
     },
     columns() {
-      return this.table[0];
+      const firstRow = this.table[0] ?? [];
+
+      return this.hasHeaders
+        ? firstRow
+        : Array.from({
+            length: firstRow.length || this.tableField.minColumns || 2,
+          }).fill("");
     },
     hasAlignment() {
       return this.tableField.align;
     },
+    hasHeaders() {
+      return this.tableField.headers !== false;
+    },
+    rowOffset() {
+      return this.hasHeaders ? 1 : 0;
+    },
     rows() {
-      return this.table.slice(1);
+      return this.hasHeaders
+        ? this.table.slice(1)
+        : this.table;
     },
     table() {
       const minColumns = this.tableField.minColumns ?? 2;
@@ -75,7 +93,10 @@ export default {
         : [];
 
       if (table.length === 0) {
-        return Array.from({ length: 2 }, () => Array.from({ length: minColumns }).fill(""));
+        const rowCount = this.hasHeaders ? 2 : 1;
+        return Array.from({ length: rowCount }, () => {
+          return Array.from({ length: minColumns }).fill("");
+        });
       }
 
       const width = Math.max(minColumns, ...table.map(row => row.length));
