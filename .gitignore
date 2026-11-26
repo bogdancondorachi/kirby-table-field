@@ -1,12 +1,10 @@
-# OS files
+# OS
 .DS_Store
 
-# Development files
+# Development
 /node_modules
 /vendor
 /tests
 
-# Temporary files
+# Temporary
 index.dev.mjs
-package-lock.json
-pnpm-lock.yaml
