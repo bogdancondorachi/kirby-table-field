@@ -3,8 +3,8 @@
 use Bogdancondorachi\TableField\TableField;
 
 load([
-  'Bogdancondorachi\\TableField\\Table'      => 'src/extensions/Table.php',
-  'Bogdancondorachi\\TableField\\TableField' => 'src/extensions/TableField.php'
+  'Bogdancondorachi\\TableField\\Table'      => 'src/classes/Table.php',
+  'Bogdancondorachi\\TableField\\TableField' => 'src/classes/TableField.php'
 ], __DIR__);
 
 Kirby::plugin('bogdancondorachi/table-field', [
