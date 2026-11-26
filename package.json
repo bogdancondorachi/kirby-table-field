@@ -3,13 +3,17 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "npx -y kirbyup serve src/panel/index.js",
-    "build": "npx -y kirbyup src/panel/index.js",
+    "dev": "kirbyup serve src/panel/index.js",
+    "build": "kirbyup src/panel/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^3.13.0"
+    "@antfu/eslint-config": "^3.13.0",
+    "kirbyup": "4.0.0-alpha.9"
   },
-  "browserslist": "> 2%"
+  "browserslist": "> 2%",
+  "overrides": {
+    "rolldown": "1.2.12"
+  }
 }
