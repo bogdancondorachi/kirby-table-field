@@ -1,8 +1,8 @@
 ![Kirby Table Field](./.github/preview.png)
 
-![Version](https://img.shields.io/badge/Version-V2.5.0-096BDE?style=for-the-badge&labelColor=3d444d)
-![Dependency](https://img.shields.io/packagist/dependency-v/bogdancondorachi/kirby-table-field/getkirby%2Fcms?version=2.5.0&style=for-the-badge&label=Kirby&labelColor=3d444d&color=F4E162)
-![Dependency](https://img.shields.io/packagist/dependency-v/bogdancondorachi/kirby-table-field/php?version=2.5.0&style=for-the-badge&label=PHP&labelColor=3d444d&color=7C72FF)
+![Version](https://img.shields.io/github/v/tag/bogdancondorachi/kirby-table-field?filter=v2.*&sort=semver&style=for-the-badge&label=Version&labelColor=3d444d&color=096BDE)
+![Dependency](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbogdancondorachi%2Fkirby-table-field%2F2.x%2Fcomposer.json&query=%24.require-dev%5B%27getkirby%2Fcms%27%5D&style=for-the-badge&label=Kirby&labelColor=3d444d&color=F4E162)
+![Dependency](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbogdancondorachi%2Fkirby-table-field%2F2.x%2Fcomposer.json&query=%24.require.php&style=for-the-badge&label=PHP&labelColor=3d444d&color=7C72FF)
 ![Downloads](https://img.shields.io/packagist/dt/bogdancondorachi/kirby-table-field?style=for-the-badge&labelColor=3d444d&color=2DA44E)
 
 # Kirby Table Field
