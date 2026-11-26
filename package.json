@@ -9,11 +9,8 @@
     "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^3.13.0",
-    "kirbyup": "4.0.0-alpha.9"
-  },
-  "browserslist": "> 2%",
-  "overrides": {
-    "rolldown": "1.2.12"
+    "@antfu/eslint-config": "^10.0.0",
+    "eslint-plugin-format": "^2.0.1",
+    "kirbyup": "^4.0.0"
   }
 }
